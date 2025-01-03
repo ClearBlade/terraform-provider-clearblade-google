@@ -12,22 +12,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-var _ provider.ProviderWithFunctions = &OneClickDeployProvider{}
+var _ provider.ProviderWithFunctions = &ClearBladeGoogleProvider{}
 
-// OneClickDeployProvider defines the provider implementation.
-type OneClickDeployProvider struct{}
+// ClearBladeGoogleProvider defines the provider implementation.
+type ClearBladeGoogleProvider struct{}
 
-// OneClickDeployProviderModel describes the provider data model.
-type OneClickDeployProviderModel struct {
+// ClearBladeGoogleProviderModel describes the provider data model.
+type ClearBladeGoogleProviderModel struct {
 	Project types.String `tfsdk:"project"`
 	Region  types.String `tfsdk:"region"`
 }
 
-func (o *OneClickDeployProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+func (o *ClearBladeGoogleProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
 	resp.TypeName = "clearblade-google"
 }
 
-func (o *OneClickDeployProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+func (o *ClearBladeGoogleProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"project": schema.StringAttribute{
@@ -40,8 +40,8 @@ func (o *OneClickDeployProvider) Schema(ctx context.Context, req provider.Schema
 	}
 }
 
-func (o *OneClickDeployProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
-	var data OneClickDeployProviderModel
+func (o *ClearBladeGoogleProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	var data ClearBladeGoogleProviderModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
@@ -57,25 +57,25 @@ func (o *OneClickDeployProvider) Configure(ctx context.Context, req provider.Con
 	resp.ResourceData = client
 }
 
-func (o *OneClickDeployProvider) Resources(ctx context.Context) []func() resource.Resource {
+func (o *ClearBladeGoogleProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewMEKResource,
 		NewRandomStringResource,
 	}
 }
 
-func (o *OneClickDeployProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+func (o *ClearBladeGoogleProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+	return []func() datasource.DataSource{
+		NewHelmValuesDataSource,
+	}
 }
 
-func (o *OneClickDeployProvider) Functions(ctx context.Context) []func() function.Function {
-	return []func() function.Function{
-		NewGetHelmYamlTemplateFunction,
-	}
+func (o *ClearBladeGoogleProvider) Functions(ctx context.Context) []func() function.Function {
+	return []func() function.Function{}
 }
 
 func New() func() provider.Provider {
 	return func() provider.Provider {
-		return &OneClickDeployProvider{}
+		return &ClearBladeGoogleProvider{}
 	}
 }

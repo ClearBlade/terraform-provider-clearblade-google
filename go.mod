@@ -7,6 +7,7 @@ require (
 	github.com/google/tink/go v1.7.0
 	github.com/hashicorp/terraform-plugin-framework v1.13.0
 	github.com/hashicorp/terraform-plugin-log v0.9.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

@@ -2,11 +2,11 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"gopkg.in/yaml.v3"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -36,11 +36,11 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 
 		Attributes: map[string]schema.Attribute{
 			"values": schema.StringAttribute{
-				MarkdownDescription: "Final Helm values",
+				MarkdownDescription: "Helm values",
 				Computed:            true,
 			},
 			"options": schema.SingleNestedAttribute{
-				MarkdownDescription: "Helm values",
+				MarkdownDescription: "Infrastructure options",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"global": schema.SingleNestedAttribute{
@@ -48,261 +48,261 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
 							"namespace": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+								MarkdownDescription: "Instance namespace to deploy to",
 								Required:            true,
 							},
-							"imagePullerSecret": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"image_puller_secret": schema.StringAttribute{
+								MarkdownDescription: "Image puller secret key needed to pull the container images from GCR",
 								Required:            true,
 							},
-							"enterpriseBaseURL": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"enterprise_base_url": schema.StringAttribute{
+								MarkdownDescription: "The base URL the platform will be reachable at",
 								Required:            true,
 							},
-							"enterpriseBlueVersion": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"enterprise_blue_version": schema.StringAttribute{
+								MarkdownDescription: "The blue version is the default ClearBlade version",
 								Required:            true,
 							},
-							"enterpriseInstanceID": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"enterprise_instance_id": schema.StringAttribute{
+								MarkdownDescription: "The Instance ID for the deployment, provided by ClearBlade",
 								Required:            true,
 							},
-							"enterpriseRegistrationKey": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"enterprise_registration_key": schema.StringAttribute{
+								MarkdownDescription: "Unique registration key for new users to register with the platform",
 								Required:            true,
 							},
-							"gcpProject": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"gcp_project": schema.StringAttribute{
+								MarkdownDescription: "GCP project ID",
 								Required:            true,
 							},
-							"gcpRegion": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"gcp_region": schema.StringAttribute{
+								MarkdownDescription: "GCP region",
 								Required:            true,
 							},
-							"gcpGSMServiceAccount": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"gcp_gsm_service_account": schema.StringAttribute{
+								MarkdownDescription: "Google Secret Manager service account email",
 								Required:            true,
 							},
-							"storageClassName": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"storage_class_name": schema.StringAttribute{
+								MarkdownDescription: "The storage class used by all Persistent Volume Claims in the deployment",
 								Required:            true,
 							},
-							"iotCoreEnabled": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"iotcore_enabled": schema.BoolAttribute{
+								MarkdownDescription: "Set to true if this deployment uses the IOTCore Sidecar",
 								Required:            true,
 							},
-							"iaEnabled": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"ia_enabled": schema.BoolAttribute{
+								MarkdownDescription: "Set to true if this deployment uses the Intelligent Assets Sidecar",
 								Required:            true,
 							},
-							"gcpCloudSQLEnabled": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"gcp_cloudsql_enabled": schema.BoolAttribute{
+								MarkdownDescription: "Set to true if you are using GCP's Cloud SQL instead of postgres",
 								Required:            true,
 							},
-							"gcpMemoryStoreEnabled": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"gcp_memorystore_enabled": schema.BoolAttribute{
+								MarkdownDescription: "Set to true if you are using GCP's MemoryStore instead of redis",
 								Required:            true,
 							},
 						},
 					},
-					"cb-console": schema.SingleNestedAttribute{
+					"cb_console": schema.SingleNestedAttribute{
 						MarkdownDescription: "Helm Chart cb-console section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
-							"requestCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"request_cpu": schema.Int32Attribute{
+								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
-							"requestMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"request_memory": schema.StringAttribute{
+								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limitCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_cpu": schema.Int32Attribute{
+								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
-							"limitMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_memory": schema.StringAttribute{
+								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
 						},
 					},
-					"cb-file-hosting": schema.SingleNestedAttribute{
-						MarkdownDescription: "Helm Chart cb-file-hosting section",
+					"cb_file_hosting": schema.SingleNestedAttribute{
+						MarkdownDescription: "Helm Chart cb_file_hosting section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
-							"requestCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"request_cpu": schema.Int32Attribute{
+								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
-							"requestMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"request_memory": schema.StringAttribute{
+								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limitCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_cpu": schema.Int32Attribute{
+								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
-							"limitMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_memory": schema.StringAttribute{
+								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
 						},
 					},
-					"cb-haproxy": schema.SingleNestedAttribute{
-						MarkdownDescription: "Helm Chart cb-haproxy section",
+					"cb_haproxy": schema.SingleNestedAttribute{
+						MarkdownDescription: "Helm Chart cb_haproxy section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
 							"replicas": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+								MarkdownDescription: "Number of HAProxy replicas",
 								Required:            true,
 							},
-							"requestCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"request_cpu": schema.Int32Attribute{
+								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
-							"requestMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"request_memory": schema.StringAttribute{
+								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limitCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_cpu": schema.Int32Attribute{
+								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
-							"limitMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_memory": schema.StringAttribute{
+								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
 							"enabled": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+								MarkdownDescription: "Set to false if using an external HAProxy deployment",
 								Required:            true,
 							},
-							"primaryIP": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"primary_ip": schema.StringAttribute{
+								MarkdownDescription: "Required if using this HAProxy. The primary external IP address for the deployment",
 								Required:            true,
 							},
-							"mqttIP": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"mqtt_ip": schema.StringAttribute{
+								MarkdownDescription: "Required if utilizing external MQTT connections",
 								Required:            true,
 							},
-							"mqttOver443": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"mqtt_over_443": schema.BoolAttribute{
+								MarkdownDescription: "Set to true if you would like MQTT connections to work over 443 in addition to the default 1883",
 								Required:            true,
 							},
 						},
 					},
-					"cb-iotcore": schema.SingleNestedAttribute{
-						MarkdownDescription: "Helm Chart cb-iotcore section",
+					"cb_iotcore": schema.SingleNestedAttribute{
+						MarkdownDescription: "Helm Chart cb_iotcore section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
-							"checkClearbladeReadiness": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"check_clearblade_readiness": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to force the IOTCore pod to wait for the Clearblade pods before starting",
 								Required:            true,
 							},
-							"requestCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"request_cpu": schema.Int32Attribute{
+								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
-							"requestMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"request_memory": schema.StringAttribute{
+								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limitCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_cpu": schema.Int32Attribute{
+								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
-							"limitMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_memory": schema.StringAttribute{
+								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
 						},
 					},
-					"cb-ia": schema.SingleNestedAttribute{
-						MarkdownDescription: "Helm Chart cb-ia section",
+					"cb_ia": schema.SingleNestedAttribute{
+						MarkdownDescription: "Helm Chart cb_ia section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
-							"checkClearbladeReadiness": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"check_clearblade_readiness": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to force the Intelligent Assets pod to wait for the Clearblade pods before starting",
 								Required:            true,
 							},
-							"requestCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"request_cpu": schema.Int32Attribute{
+								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
-							"requestMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"request_memory": schema.StringAttribute{
+								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limitCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_cpu": schema.Int32Attribute{
+								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
-							"limitMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_memory": schema.StringAttribute{
+								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
 						},
 					},
-					"cb-postgres": schema.SingleNestedAttribute{
-						MarkdownDescription: "Helm Chart cb-postgres section",
+					"cb_postgres": schema.SingleNestedAttribute{
+						MarkdownDescription: "Helm Chart cb_postgres section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+								MarkdownDescription: "Set to false if using an external postgres deployment",
 								Required:            true,
 							},
 							"replicas": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+								MarkdownDescription: "Number of Postgres replicas",
 								Required:            true,
 							},
-							"requestCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"request_cpu": schema.Int32Attribute{
+								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
-							"requestMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"request_memory": schema.StringAttribute{
+								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limitCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_cpu": schema.Int32Attribute{
+								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
-							"limitMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_memory": schema.StringAttribute{
+								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
-							"postgres0DiskName": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"postgres0_disk_name": schema.StringAttribute{
+								MarkdownDescription: "Postgres0 disk name",
 								Required:            true,
 							},
 						},
 					},
-					"cb-redis": schema.SingleNestedAttribute{
-						MarkdownDescription: "Helm Chart cb-redis section",
+					"cb_redis": schema.SingleNestedAttribute{
+						MarkdownDescription: "Helm Chart cb_redis section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+								MarkdownDescription: "Set to false if using an external redis deployment",
 								Required:            true,
 							},
-							"highAvailability": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"high_availability": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to utilize redis sentinel with automatic failover. Requires roughly 4x CPU/mem as a non-HA deployment",
 								Required:            true,
 							},
-							"requestCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"request_cpu": schema.Int32Attribute{
+								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
-							"requestMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"request_memory": schema.StringAttribute{
+								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limitCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_cpu": schema.Int32Attribute{
+								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
-							"limitMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_memory": schema.StringAttribute{
+								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
 						},
@@ -311,32 +311,32 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 						MarkdownDescription: "Helm Chart clearblade section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
-							"blueReplicas": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"blue_replicas": schema.Int32Attribute{
+								MarkdownDescription: "If not using blue/green deployments, blue is the default",
 								Required:            true,
 							},
-							"greenReplicas": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"green_replicas": schema.Int32Attribute{
+								MarkdownDescription: "If not using blue/green deployments, set to 0",
 								Required:            true,
 							},
-							"mqttAllowDuplicateClientID": schema.BoolAttribute{
-								MarkdownDescription: "Instance namespace",
+							"mqtt_allow_duplicate_client_id": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to allow duplicate client IDs. Set to false to reject duplicate connections",
 								Required:            true,
 							},
-							"requestCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"request_cpu": schema.Int32Attribute{
+								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
-							"requestMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"request_memory": schema.StringAttribute{
+								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limitCPU": schema.Int32Attribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_cpu": schema.Int32Attribute{
+								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
-							"limitMemory": schema.StringAttribute{
-								MarkdownDescription: "Instance namespace",
+							"limit_memory": schema.StringAttribute{
+								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
 						},
@@ -363,13 +363,13 @@ func (d *HelmValuesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	data.Options.Global.Cloud = types.StringValue("gcp")
-	valuesStr, err := json.Marshal(data)
+	values := data.Options.toHelmValues()
+	valuesYaml, err := yaml.Marshal(values)
 	if err != nil {
-		resp.Diagnostics.AddError("Failed to marhsal data", err.Error())
+		resp.Diagnostics.AddError("Failed to marhsal values", err.Error())
 		return
 	}
-	data.HelmValues = types.StringValue(string(valuesStr))
+	data.HelmValues = types.StringValue(string(valuesYaml))
 
 	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
