@@ -214,6 +214,7 @@ func (t *TfHelmValues) toHelmValues() *HelmValues {
 			Namespace:                 t.Global.Namespace.ValueString(),
 			ImagePullerSecret:         t.Global.ImagePullerSecret.ValueString(),
 			EnterpriseBaseURL:         t.Global.EnterpriseBaseURL.ValueString(),
+			EnterpriseBlueVersion:     t.Global.EnterpriseBlueVersion.ValueString(),
 			EnterpriseInstanceID:      t.Global.EnterpriseInstanceID.ValueString(),
 			EnterpriseRegistrationKey: t.Global.EnterpriseRegistrationKey.ValueString(),
 			IotCoreEnabled:            t.Global.IotCoreEnabled.ValueBool(),
