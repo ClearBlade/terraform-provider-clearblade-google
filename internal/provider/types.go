@@ -3,163 +3,105 @@ package provider
 import "github.com/hashicorp/terraform-plugin-framework/types"
 
 type HelmValues struct {
-	Global        Global        `yaml:"global"`
-	Clearblade    Clearblade    `yaml:"clearblade"`
-	CbHaproxy     CbHaproxy     `yaml:"cb-haproxy"`
-	CbPostgres    CbPostgres    `yaml:"cb-postgres"`
-	CbRedis       CbRedis       `yaml:"cb-redis"`
-	CbConsole     CbConsole     `yaml:"cb-console"`
-	CbFileHosting CbFileHosting `yaml:"cb-file-hosting"`
-	CbIotcore     CbIotcore     `yaml:"cb-iotcore"`
+	Global        Global      `yaml:"global"`
+	CbConsole     Console     `yaml:"cb-console"`
+	CbFileHosting FileHosting `yaml:"cb-file-hosting"`
+	CbHaproxy     HAProxy     `yaml:"cb-haproxy"`
+	CbIotcore     IotCore     `yaml:"cb-iotcore"`
+	CbIa          Ia          `yaml:"cb-ia"`
+	CbPostgres    Postgres    `yaml:"cb-postgres"`
+	CbRedis       Redis       `yaml:"cb-redis"`
+	Clearblade    Clearblade  `yaml:"clearblade"`
 }
 
 type Global struct {
-	Namespace         string      `yaml:"namespace"`
-	NodeSelector      string      `yaml:"nodeSelector"`
-	Tolerations       interface{} `yaml:"tolerations"`
-	ImagePullerSecret string      `yaml:"imagePullerSecret"`
-	Enterprise        Enterprise  `yaml:"enterprise"`
-	IotCore           IotCore     `yaml:"iotCore"`
-	IA                IA          `yaml:"IA"`
-	Gcp               Gcp         `yaml:"gcp"`
-	Advanced          Advanced    `yaml:"advanced"`
-	MtlsHAProxy       bool        `yaml:"mtlsHAProxy"`
-	MtlsClearBlade    bool        `yaml:"mtlsClearBlade"`
-	GMP               bool        `yaml:"GMP"`
+	Cloud                     string      `yaml:"cloud"`
+	Namespace                 interface{} `yaml:"namespace"`
+	ImagePullerSecret         interface{} `yaml:"imagePullerSecret"`
+	EnterpriseBaseURL         interface{} `yaml:"enterpriseBaseURL"`
+	EnterpriseBlueVersion     interface{} `yaml:"enterpriseBlueVersion"`
+	EnterpriseInstanceID      interface{} `yaml:"enterpriseInstanceID"`
+	EnterpriseRegistrationKey interface{} `yaml:"enterpriseRegistrationKey"`
+	IotCoreEnabled            bool        `yaml:"iotCoreEnabled"`
+	IaEnabled                 bool        `yaml:"iaEnabled"`
+	GcpCloudSQLEnabled        bool        `yaml:"gcpCloudSQLEnabled"`
+	GcpMemoryStoreEnabled     bool        `yaml:"gcpMemoryStoreEnabled"`
+	GcpProject                interface{} `yaml:"gcpProject"`
+	GcpRegion                 interface{} `yaml:"gcpRegion"`
+	GcpGSMServiceAccount      interface{} `yaml:"gcpGSMServiceAccount"`
+	SecretManager             string      `yaml:"secretManager"`
+	StorageClassName          string      `yaml:"storageClassName"`
 }
 
-type Enterprise struct {
-	Version         string      `yaml:"version"`
-	GreenVersion    interface{} `yaml:"greenVersion"`
-	Slot            string      `yaml:"slot"`
-	BaseURL         string      `yaml:"baseURL"`
-	ConsoleURL      interface{} `yaml:"consoleURL"`
-	RegistrationKey string      `yaml:"registrationKey"`
-	TagOverride     bool        `yaml:"tagOverride"`
-	InstanceID      interface{} `yaml:"instanceID"`
+type Console struct {
+	RequestCPU    int    `yaml:"requestCPU"`
+	RequestMemory string `yaml:"requestMemory"`
+	LimitCPU      int    `yaml:"limitCPU"`
+	LimitMemory   string `yaml:"limitMemory"`
+}
+
+type FileHosting struct {
+	RequestCPU    int    `yaml:"requestCPU"`
+	RequestMemory string `yaml:"requestMemory"`
+	LimitCPU      int    `yaml:"limitCPU"`
+	LimitMemory   string `yaml:"limitMemory"`
+}
+
+type HAProxy struct {
+	Replicas      int         `yaml:"replicas"`
+	RequestCPU    int         `yaml:"requestCPU"`
+	RequestMemory string      `yaml:"requestMemory"`
+	LimitCPU      int         `yaml:"limitCPU"`
+	LimitMemory   string      `yaml:"limitMemory"`
+	Enabled       bool        `yaml:"enabled"`
+	PrimaryIP     interface{} `yaml:"primaryIP"`
+	MqttIP        interface{} `yaml:"mqttIP"`
+	MqttOver443   bool        `yaml:"mqttOver443"`
 }
 
 type IotCore struct {
-	Enabled bool   `yaml:"enabled"`
-	Version string `yaml:"version"`
-	Regions string `yaml:"regions"`
+	CheckClearbladeReadiness bool   `yaml:"checkClearbladeReadiness"`
+	RequestCPU               int    `yaml:"requestCPU"`
+	RequestMemory            string `yaml:"requestMemory"`
+	LimitCPU                 int    `yaml:"limitCPU"`
+	LimitMemory              string `yaml:"limitMemory"`
 }
 
-type IA struct {
-	Enabled bool   `yaml:"enabled"`
-	Version string `yaml:"version"`
+type Ia struct {
+	CheckClearbladeReadiness bool   `yaml:"checkClearbladeReadiness"`
+	RequestCPU               int    `yaml:"requestCPU"`
+	RequestMemory            string `yaml:"requestMemory"`
+	LimitCPU                 int    `yaml:"limitCPU"`
+	LimitMemory              string `yaml:"limitMemory"`
 }
 
-type Gcp struct {
-	Project               string `yaml:"project"`
-	Region                string `yaml:"region"`
-	GsmReadServiceAccount string `yaml:"gsmReadServiceAccount"`
+type Postgres struct {
+	Enabled           bool   `yaml:"enabled"`
+	Replicas          int    `yaml:"replicas"`
+	RequestCPU        int    `yaml:"requestCPU"`
+	RequestMemory     string `yaml:"requestMemory"`
+	LimitCPU          int    `yaml:"limitCPU"`
+	LimitMemory       string `yaml:"limitMemory"`
+	Postgres0DiskName string `yaml:"postgres0DiskName"`
 }
 
-type Advanced struct {
-	PredefinedNamespace bool        `yaml:"predefinedNamespace"`
-	MemoryStore         MemoryStore `yaml:"memoryStore"`
-	CloudSQL            CloudSQL    `yaml:"cloudSQL"`
-	Secrets             Secrets     `yaml:"secrets"`
-}
-
-type MemoryStore struct {
-	Enabled bool        `yaml:"enabled"`
-	Address interface{} `yaml:"address"`
-}
-
-type CloudSQL struct {
-	Enabled                bool        `yaml:"enabled"`
-	DatabaseConnectionName interface{} `yaml:"databaseConnectionName"`
-}
-
-type Secrets struct {
-	Manager string `yaml:"manager"`
+type Redis struct {
+	Enabled          bool   `yaml:"enabled"`
+	HighAvailability bool   `yaml:"highAvailability"`
+	RequestCPU       int    `yaml:"requestCPU"`
+	RequestMemory    string `yaml:"requestMemory"`
+	LimitCPU         int    `yaml:"limitCPU"`
+	LimitMemory      string `yaml:"limitMemory"`
 }
 
 type Clearblade struct {
-	Replicas         int              `yaml:"replicas"`
-	GreenReplicas    int              `yaml:"greenReplicas"`
-	License          License          `yaml:"license"`
-	ResourceRequests ResourceRequests `yaml:"resourceRequests"`
-	ResourceLimits   ResourceLimits   `yaml:"resourceLimits"`
-	Mqtt             Mqtt             `yaml:"mqtt"`
-}
-
-type License struct {
-	Key        string    `yaml:"key"`
-	InstanceID string    `yaml:"instanceID"`
-	AutoRenew  AutoRenew `yaml:"autoRenew"`
-}
-
-type AutoRenew struct {
-	Enabled bool `yaml:"enabled"`
-}
-
-type ResourceRequests struct {
-	CPU    int    `yaml:"cpu"`
-	Memory string `yaml:"memory"`
-}
-
-type ResourceLimits struct {
-	CPU    int    `yaml:"cpu"`
-	Memory string `yaml:"memory"`
-}
-
-type Mqtt struct {
-	AllowDuplicateClientID bool `yaml:"allowDuplicateClientID"`
-}
-
-type CbHaproxy struct {
-	Enabled           bool             `yaml:"enabled"`
-	MonitoringEnabled bool             `yaml:"monitoringEnabled"`
-	Replicas          int              `yaml:"replicas"`
-	Image             string           `yaml:"image"`
-	ImageTag          string           `yaml:"imageTag"`
-	MqttOver443       bool             `yaml:"mqttOver443"`
-	StatsAuth         string           `yaml:"stats_auth"`
-	IP                IP               `yaml:"ip"`
-	ResourceRequests  ResourceRequests `yaml:"resourceRequests"`
-	ResourceLimits    ResourceLimits   `yaml:"resourceLimits"`
-}
-
-type IP struct {
-	Primary string `yaml:"primary"`
-	Mqtt    string `yaml:"mqtt"`
-}
-
-type CbPostgres struct {
-	Enabled           bool             `yaml:"enabled"`
-	MonitoringEnabled bool             `yaml:"monitoringEnabled"`
-	Image             string           `yaml:"image"`
-	ImageTag          string           `yaml:"imageTag"`
-	Replicas          int              `yaml:"replicas"`
-	ResourceRequests  ResourceRequests `yaml:"resourceRequests"`
-	ResourceLimits    ResourceLimits   `yaml:"resourceLimits"`
-}
-
-type CbRedis struct {
-	Enabled           bool             `yaml:"enabled"`
-	MonitoringEnabled bool             `yaml:"monitoringEnabled"`
-	Image             string           `yaml:"image"`
-	ImageTag          string           `yaml:"imageTag"`
-	ResourceLimits    ResourceLimits   `yaml:"resourceLimits"`
-	ResourceRequests  ResourceRequests `yaml:"resourceRequests"`
-}
-
-type CbConsole struct {
-	ResourceRequests ResourceRequests `yaml:"resourceRequests"`
-	ResourceLimits   ResourceLimits   `yaml:"resourceLimits"`
-}
-
-type CbFileHosting struct {
-	ResourceLimits   ResourceLimits   `yaml:"resourceLimits"`
-	ResourceRequests ResourceRequests `yaml:"resourceRequests"`
-}
-
-type CbIotcore struct {
-	CheckClearbladeReadiness bool           `yaml:"checkClearbladeReadiness"`
-	ResourceLimits           ResourceLimits `yaml:"resourceLimits"`
+	BlueReplicas               int    `yaml:"blueReplicas"`
+	GreenReplicas              int    `yaml:"greenReplicas"`
+	MqttAllowDuplicateClientID bool   `yaml:"mqttAllowDuplicateClientID"`
+	RequestCPU                 int    `yaml:"requestCPU"`
+	RequestMemory              string `yaml:"requestMemory"`
+	LimitCPU                   int    `yaml:"limitCPU"`
+	LimitMemory                string `yaml:"limitMemory"`
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -268,137 +210,85 @@ type TfClearblade struct {
 func (t *TfHelmValues) toHelmValues() *HelmValues {
 	h := &HelmValues{
 		Global: Global{
-			Namespace:         t.Global.Namespace.ValueString(),
-			ImagePullerSecret: t.Global.ImagePullerSecret.ValueString(),
-			Enterprise: Enterprise{
-				Version:         t.Global.EnterpriseBlueVersion.ValueString(),
-				Slot:            "blue",
-				BaseURL:         t.Global.EnterpriseBaseURL.ValueString(),
-				RegistrationKey: t.Global.EnterpriseRegistrationKey.ValueString(),
-				TagOverride:     false,
-			},
-			IotCore: IotCore{
-				Enabled: t.Global.IotCoreEnabled.ValueBool(),
-			},
-			IA: IA{
-				Enabled: t.Global.IaEnabled.ValueBool(),
-			},
-			Gcp: Gcp{
-				Project:               t.Global.GcpProject.ValueString(),
-				Region:                t.Global.GcpRegion.ValueString(),
-				GsmReadServiceAccount: t.Global.GcpGSMServiceAccount.ValueString(),
-			},
-			Advanced: Advanced{
-				PredefinedNamespace: false,
-				MemoryStore: MemoryStore{
-					Enabled: t.Global.GcpMemoryStoreEnabled.ValueBool(),
-				},
-				CloudSQL: CloudSQL{
-					Enabled: t.Global.GcpCloudSQLEnabled.ValueBool(),
-				},
-				Secrets: Secrets{
-					Manager: "gsm",
-				},
-			},
-			MtlsHAProxy:    false,
-			MtlsClearBlade: false,
-			GMP:            false,
+			Cloud:                     "gcp",
+			Namespace:                 t.Global.Namespace.ValueString(),
+			ImagePullerSecret:         t.Global.ImagePullerSecret.ValueString(),
+			EnterpriseBaseURL:         t.Global.EnterpriseBaseURL.ValueString(),
+			EnterpriseBlueVersion:     t.Global.EnterpriseBlueVersion.ValueString(),
+			EnterpriseInstanceID:      t.Global.EnterpriseInstanceID.ValueString(),
+			EnterpriseRegistrationKey: t.Global.EnterpriseRegistrationKey.ValueString(),
+			IotCoreEnabled:            t.Global.IotCoreEnabled.ValueBool(),
+			IaEnabled:                 t.Global.IaEnabled.ValueBool(),
+			GcpCloudSQLEnabled:        t.Global.GcpCloudSQLEnabled.ValueBool(),
+			GcpMemoryStoreEnabled:     t.Global.GcpMemoryStoreEnabled.ValueBool(),
+			GcpProject:                t.Global.GcpProject.ValueString(),
+			GcpRegion:                 t.Global.GcpRegion.ValueString(),
+			GcpGSMServiceAccount:      t.Global.GcpGSMServiceAccount.ValueString(),
+			SecretManager:             "gsm",
+			StorageClassName:          t.Global.StorageClassName.ValueString(),
+		},
+		CbConsole: Console{
+			RequestCPU:    int(t.CbConsole.RequestCPU.ValueInt32()),
+			RequestMemory: t.CbConsole.RequestMemory.ValueString(),
+			LimitCPU:      int(t.CbConsole.LimitCPU.ValueInt32()),
+			LimitMemory:   t.CbConsole.LimitMemory.ValueString(),
+		},
+		CbFileHosting: FileHosting{
+			RequestCPU:    int(t.CbFileHosting.RequestCPU.ValueInt32()),
+			RequestMemory: t.CbFileHosting.RequestMemory.ValueString(),
+			LimitCPU:      int(t.CbFileHosting.LimitCPU.ValueInt32()),
+			LimitMemory:   t.CbFileHosting.LimitMemory.ValueString(),
+		},
+		CbHaproxy: HAProxy{
+			Replicas:      int(t.CbHaproxy.Replicas.ValueInt32()),
+			RequestCPU:    int(t.CbHaproxy.RequestCPU.ValueInt32()),
+			RequestMemory: t.CbHaproxy.RequestMemory.ValueString(),
+			LimitCPU:      int(t.CbHaproxy.LimitCPU.ValueInt32()),
+			LimitMemory:   t.CbHaproxy.LimitMemory.ValueString(),
+			Enabled:       t.CbHaproxy.Enabled.ValueBool(),
+			PrimaryIP:     t.CbHaproxy.PrimaryIP.ValueString(),
+			MqttIP:        t.CbHaproxy.MqttIP.ValueString(),
+			MqttOver443:   t.CbHaproxy.MqttOver443.ValueBool(),
+		},
+		CbIotcore: IotCore{
+			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),
+			RequestCPU:               int(t.CbIotcore.RequestCPU.ValueInt32()),
+			RequestMemory:            t.CbIotcore.RequestMemory.ValueString(),
+			LimitCPU:                 int(t.CbIotcore.LimitCPU.ValueInt32()),
+			LimitMemory:              t.CbIotcore.LimitMemory.ValueString(),
+		},
+		CbIa: Ia{
+			CheckClearbladeReadiness: t.CbIa.CheckClearbladeReadiness.ValueBool(),
+			RequestCPU:               int(t.CbIa.RequestCPU.ValueInt32()),
+			RequestMemory:            t.CbIa.RequestMemory.ValueString(),
+			LimitCPU:                 int(t.CbIa.LimitCPU.ValueInt32()),
+			LimitMemory:              t.CbIa.LimitMemory.ValueString(),
+		},
+		CbPostgres: Postgres{
+			Enabled:           t.CbPostgres.Enabled.ValueBool(),
+			Replicas:          int(t.CbPostgres.Replicas.ValueInt32()),
+			RequestCPU:        int(t.CbPostgres.RequestCPU.ValueInt32()),
+			RequestMemory:     t.CbPostgres.RequestMemory.ValueString(),
+			LimitCPU:          int(t.CbPostgres.LimitCPU.ValueInt32()),
+			LimitMemory:       t.CbPostgres.LimitMemory.ValueString(),
+			Postgres0DiskName: t.CbPostgres.Postgres0DiskName.ValueString(),
+		},
+		CbRedis: Redis{
+			Enabled:          t.CbRedis.Enabled.ValueBool(),
+			HighAvailability: t.CbRedis.HighAvailability.ValueBool(),
+			RequestCPU:       int(t.CbRedis.RequestCPU.ValueInt32()),
+			RequestMemory:    t.CbRedis.RequestMemory.ValueString(),
+			LimitCPU:         int(t.CbRedis.LimitCPU.ValueInt32()),
+			LimitMemory:      t.CbRedis.LimitMemory.ValueString(),
 		},
 		Clearblade: Clearblade{
-			Replicas:      int(t.Clearblade.BlueReplicas.ValueInt32()),
-			GreenReplicas: int(t.Clearblade.GreenReplicas.ValueInt32()),
-			License: License{
-				Key:        "",
-				InstanceID: t.Global.EnterpriseInstanceID.ValueString(),
-				AutoRenew: AutoRenew{
-					Enabled: true,
-				},
-			},
-			ResourceRequests: ResourceRequests{
-				CPU:    int(t.Clearblade.RequestCPU.ValueInt32()),
-				Memory: t.Clearblade.RequestMemory.ValueString(),
-			},
-			ResourceLimits: ResourceLimits{
-				CPU:    int(t.Clearblade.LimitCPU.ValueInt32()),
-				Memory: t.Clearblade.LimitMemory.ValueString(),
-			},
-			Mqtt: Mqtt{
-				AllowDuplicateClientID: t.Clearblade.MqttAllowDuplicateClientID.ValueBool(),
-			},
-		},
-		CbHaproxy: CbHaproxy{
-			Enabled:           t.CbHaproxy.Enabled.ValueBool(),
-			MonitoringEnabled: false,
-			Replicas:          int(t.CbHaproxy.Replicas.ValueInt32()),
-			Image:             "haproxy",
-			ImageTag:          "2.6-alpine",
-			MqttOver443:       t.CbHaproxy.MqttOver443.ValueBool(),
-			IP: IP{
-				Primary: t.CbHaproxy.PrimaryIP.ValueString(),
-				Mqtt:    t.CbHaproxy.MqttIP.ValueString(),
-			},
-			ResourceRequests: ResourceRequests{
-				CPU:    int(t.CbHaproxy.RequestCPU.ValueInt32()),
-				Memory: t.CbHaproxy.RequestMemory.ValueString(),
-			},
-			ResourceLimits: ResourceLimits{
-				CPU:    int(t.CbHaproxy.LimitCPU.ValueInt32()),
-				Memory: t.CbHaproxy.LimitMemory.ValueString(),
-			},
-		},
-		CbPostgres: CbPostgres{
-			Enabled:  t.CbPostgres.Enabled.ValueBool(),
-			Image:    "timescale/timescaledb",
-			ImageTag: "latest-pg15",
-			Replicas: int(t.CbPostgres.Replicas.ValueInt32()),
-			ResourceRequests: ResourceRequests{
-				CPU:    int(t.CbPostgres.RequestCPU.ValueInt32()),
-				Memory: t.CbPostgres.RequestMemory.ValueString(),
-			},
-			ResourceLimits: ResourceLimits{
-				CPU:    int(t.CbPostgres.LimitCPU.ValueInt32()),
-				Memory: t.CbPostgres.LimitMemory.ValueString(),
-			},
-		},
-		CbRedis: CbRedis{
-			Enabled:  t.CbRedis.Enabled.ValueBool(),
-			Image:    "redis",
-			ImageTag: "alpine",
-			ResourceRequests: ResourceRequests{
-				CPU:    int(t.CbRedis.RequestCPU.ValueInt32()),
-				Memory: t.CbRedis.RequestMemory.ValueString(),
-			},
-			ResourceLimits: ResourceLimits{
-				CPU:    int(t.CbRedis.LimitCPU.ValueInt32()),
-				Memory: t.CbRedis.LimitMemory.ValueString(),
-			},
-		},
-		CbConsole: CbConsole{
-			ResourceRequests: ResourceRequests{
-				CPU:    int(t.CbConsole.RequestCPU.ValueInt32()),
-				Memory: t.CbConsole.RequestMemory.ValueString(),
-			},
-			ResourceLimits: ResourceLimits{
-				CPU:    int(t.CbConsole.LimitCPU.ValueInt32()),
-				Memory: t.CbConsole.LimitMemory.ValueString(),
-			},
-		},
-		CbFileHosting: CbFileHosting{
-			ResourceRequests: ResourceRequests{
-				CPU:    int(t.CbFileHosting.RequestCPU.ValueInt32()),
-				Memory: t.CbFileHosting.RequestMemory.ValueString(),
-			},
-			ResourceLimits: ResourceLimits{
-				CPU:    int(t.CbFileHosting.LimitCPU.ValueInt32()),
-				Memory: t.CbFileHosting.LimitMemory.ValueString(),
-			},
-		},
-		CbIotcore: CbIotcore{
-			CheckClearbladeReadiness: false,
-			ResourceLimits: ResourceLimits{
-				CPU:    int(t.CbIotcore.LimitCPU.ValueInt32()),
-				Memory: t.CbIotcore.LimitMemory.ValueString(),
-			},
+			BlueReplicas:               int(t.Clearblade.BlueReplicas.ValueInt32()),
+			GreenReplicas:              int(t.Clearblade.GreenReplicas.ValueInt32()),
+			MqttAllowDuplicateClientID: t.Clearblade.MqttAllowDuplicateClientID.ValueBool(),
+			RequestCPU:                 int(t.Clearblade.RequestCPU.ValueInt32()),
+			RequestMemory:              t.Clearblade.RequestMemory.ValueString(),
+			LimitCPU:                   int(t.Clearblade.LimitCPU.ValueInt32()),
+			LimitMemory:                t.Clearblade.LimitMemory.ValueString(),
 		},
 	}
 	return h
