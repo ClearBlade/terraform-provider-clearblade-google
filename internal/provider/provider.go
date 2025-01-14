@@ -61,6 +61,7 @@ func (o *ClearBladeGoogleProvider) Resources(ctx context.Context) []func() resou
 	return []func() resource.Resource{
 		NewMEKResource,
 		NewRandomStringResource,
+		NewTLSCertificateResource,
 	}
 }
 

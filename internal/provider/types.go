@@ -57,6 +57,8 @@ type HAProxy struct {
 	PrimaryIP     interface{} `yaml:"primaryIP"`
 	MqttIP        interface{} `yaml:"mqttIP"`
 	MqttOver443   bool        `yaml:"mqttOver443"`
+	CertRenewal   bool        `yaml:"certRenewal"`
+	RenewalDays   int         `yaml:"renewalDays"`
 }
 
 type IotCore struct {
@@ -160,6 +162,8 @@ type TfHAProxy struct {
 	PrimaryIP     types.String `tfsdk:"primary_ip"`
 	MqttIP        types.String `tfsdk:"mqtt_ip"`
 	MqttOver443   types.Bool   `tfsdk:"mqtt_over_443"`
+	CertRenewal   types.Bool   `yaml:"cert_renewal"`
+	RenewalDays   types.Int32  `yaml:"renewal_days"`
 }
 
 type TfIotCore struct {
@@ -249,6 +253,8 @@ func (t *TfHelmValues) toHelmValues() *HelmValues {
 			PrimaryIP:     t.CbHaproxy.PrimaryIP.ValueString(),
 			MqttIP:        t.CbHaproxy.MqttIP.ValueString(),
 			MqttOver443:   t.CbHaproxy.MqttOver443.ValueBool(),
+			CertRenewal:   t.CbHaproxy.CertRenewal.ValueBool(),
+			RenewalDays:   int(t.CbHaproxy.RenewalDays.ValueInt32()),
 		},
 		CbIotcore: IotCore{
 			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),

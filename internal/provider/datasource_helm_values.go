@@ -189,6 +189,14 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true if you would like MQTT connections to work over 443 in addition to the default 1883",
 								Required:            true,
 							},
+							"cert_renewal": schema.BoolAttribute{
+								MarkdownDescription: "Set to true for automatic cert renewal with LetsEncrypt",
+								Required:            true,
+							},
+							"renewal_days": schema.Int32Attribute{
+								MarkdownDescription: "Days out to renew cert",
+								Required:            true,
+							},
 						},
 					},
 					"cb_iotcore": schema.SingleNestedAttribute{
