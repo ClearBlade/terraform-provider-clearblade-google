@@ -162,8 +162,8 @@ type TfHAProxy struct {
 	PrimaryIP     types.String `tfsdk:"primary_ip"`
 	MqttIP        types.String `tfsdk:"mqtt_ip"`
 	MqttOver443   types.Bool   `tfsdk:"mqtt_over_443"`
-	CertRenewal   types.Bool   `yaml:"cert_renewal"`
-	RenewalDays   types.Int32  `yaml:"renewal_days"`
+	CertRenewal   types.Bool   `tfsdk:"cert_renewal"`
+	RenewalDays   types.Int32  `tfsdk:"renewal_days"`
 }
 
 type TfIotCore struct {
