@@ -224,6 +224,7 @@ func (t *TfHelmValues) toHelmValues() *HelmValues {
 			EnterpriseBaseURL:         t.Global.EnterpriseBaseURL.ValueString(),
 			EnterpriseBlueVersion:     t.Global.EnterpriseBlueVersion.ValueString(),
 			EnterpriseGreenVersion:    t.Global.EnterpriseGreenVersion.ValueString(),
+			EnterpriseSlot:            t.Global.EnterpriseSlot.ValueString(),
 			EnterpriseInstanceID:      t.Global.EnterpriseInstanceID.ValueString(),
 			EnterpriseRegistrationKey: t.Global.EnterpriseRegistrationKey.ValueString(),
 			IotCoreEnabled:            t.Global.IotCoreEnabled.ValueBool(),
