@@ -20,6 +20,8 @@ type Global struct {
 	ImagePullerSecret         interface{} `yaml:"imagePullerSecret"`
 	EnterpriseBaseURL         interface{} `yaml:"enterpriseBaseURL"`
 	EnterpriseBlueVersion     interface{} `yaml:"enterpriseBlueVersion"`
+	EnterpriseGreenVersion    interface{} `yaml:"enterpriseGreenVersion, omitempty"`
+	EnterpriseSlot            interface{} `yaml:"enterpriseSlot, omitempty"`
 	EnterpriseInstanceID      interface{} `yaml:"enterpriseInstanceID"`
 	EnterpriseRegistrationKey interface{} `yaml:"enterpriseRegistrationKey"`
 	IotCoreEnabled            bool        `yaml:"iotCoreEnabled"`
@@ -126,6 +128,8 @@ type TfGlobal struct {
 	ImagePullerSecret         types.String `tfsdk:"image_puller_secret"`
 	EnterpriseBaseURL         types.String `tfsdk:"enterprise_base_url"`
 	EnterpriseBlueVersion     types.String `tfsdk:"enterprise_blue_version"`
+	EnterpriseGreenVersion    types.String `tfsdk:"enterprise_green_version, omitempty"`
+	EnterpriseSlot            types.String `tfsdk:"enterprise_slot, omitempty"`
 	EnterpriseInstanceID      types.String `tfsdk:"enterprise_instance_id"`
 	EnterpriseRegistrationKey types.String `tfsdk:"enterprise_registration_key"`
 	IotCoreEnabled            types.Bool   `tfsdk:"iotcore_enabled"`
@@ -219,6 +223,7 @@ func (t *TfHelmValues) toHelmValues() *HelmValues {
 			ImagePullerSecret:         t.Global.ImagePullerSecret.ValueString(),
 			EnterpriseBaseURL:         t.Global.EnterpriseBaseURL.ValueString(),
 			EnterpriseBlueVersion:     t.Global.EnterpriseBlueVersion.ValueString(),
+			EnterpriseGreenVersion:    t.Global.EnterpriseGreenVersion.ValueString(),
 			EnterpriseInstanceID:      t.Global.EnterpriseInstanceID.ValueString(),
 			EnterpriseRegistrationKey: t.Global.EnterpriseRegistrationKey.ValueString(),
 			IotCoreEnabled:            t.Global.IotCoreEnabled.ValueBool(),
