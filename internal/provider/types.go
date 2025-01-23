@@ -128,8 +128,8 @@ type TfGlobal struct {
 	ImagePullerSecret         types.String `tfsdk:"image_puller_secret"`
 	EnterpriseBaseURL         types.String `tfsdk:"enterprise_base_url"`
 	EnterpriseBlueVersion     types.String `tfsdk:"enterprise_blue_version"`
-	EnterpriseGreenVersion    types.String `tfsdk:"enterprise_green_version, omitempty"`
-	EnterpriseSlot            types.String `tfsdk:"enterprise_slot, omitempty"`
+	EnterpriseGreenVersion    types.String `tfsdk:"enterprise_green_version"`
+	EnterpriseSlot            types.String `tfsdk:"enterprise_slot"`
 	EnterpriseInstanceID      types.String `tfsdk:"enterprise_instance_id"`
 	EnterpriseRegistrationKey types.String `tfsdk:"enterprise_registration_key"`
 	IotCoreEnabled            types.Bool   `tfsdk:"iotcore_enabled"`
