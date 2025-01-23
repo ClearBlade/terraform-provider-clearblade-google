@@ -20,8 +20,8 @@ type Global struct {
 	ImagePullerSecret         interface{} `yaml:"imagePullerSecret"`
 	EnterpriseBaseURL         interface{} `yaml:"enterpriseBaseURL"`
 	EnterpriseBlueVersion     interface{} `yaml:"enterpriseBlueVersion"`
-	EnterpriseGreenVersion    interface{} `yaml:"enterpriseGreenVersion, omitempty"`
-	EnterpriseSlot            interface{} `yaml:"enterpriseSlot, omitempty"`
+	EnterpriseGreenVersion    interface{} `yaml:"enterpriseGreenVersion,omitempty"`
+	EnterpriseSlot            interface{} `yaml:"enterpriseSlot,omitempty"`
 	EnterpriseInstanceID      interface{} `yaml:"enterpriseInstanceID"`
 	EnterpriseRegistrationKey interface{} `yaml:"enterpriseRegistrationKey"`
 	IotCoreEnabled            bool        `yaml:"iotCoreEnabled"`
