@@ -66,10 +66,12 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 							"enterprise_green_version": schema.StringAttribute{
 								MarkdownDescription: "Utilized during Blue/Green upgrades. Leave blank if not using",
 								Required:            false,
+								Optional:            true,
 							},
 							"enterprise_slot": schema.StringAttribute{
 								MarkdownDescription: "Utilized during Blue/Green upgrades. Leave blank if not using",
 								Required:            false,
+								Optional:            true,
 							},
 							"enterprise_instance_id": schema.StringAttribute{
 								MarkdownDescription: "The Instance ID for the deployment, provided by ClearBlade",
