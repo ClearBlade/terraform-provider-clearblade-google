@@ -10,6 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"golang.org/x/oauth2"
+	"google.golang.org/api/option"
 )
 
 var _ provider.ProviderWithFunctions = &ClearBladeGoogleProvider{}
@@ -19,8 +21,8 @@ type ClearBladeGoogleProvider struct{}
 
 // ClearBladeGoogleProviderModel describes the provider data model.
 type ClearBladeGoogleProviderModel struct {
-	Project types.String `tfsdk:"project"`
-	Region  types.String `tfsdk:"region"`
+	Project     types.String `tfsdk:"project"`
+	AccessToken types.String `tfsdk:"access_token"`
 }
 
 func (o *ClearBladeGoogleProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -31,9 +33,9 @@ func (o *ClearBladeGoogleProvider) Schema(ctx context.Context, req provider.Sche
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"project": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 			},
-			"region": schema.StringAttribute{
+			"access_token": schema.StringAttribute{
 				Optional: true,
 			},
 		},
@@ -47,8 +49,16 @@ func (o *ClearBladeGoogleProvider) Configure(ctx context.Context, req provider.C
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	client, err := secretmanager.NewClient(ctx)
+	token := &oauth2.Token{
+		AccessToken: data.AccessToken.ValueString(),
+	}
+	var client *secretmanager.Client
+	var err error
+	if data.AccessToken.ValueString() == "" {
+		client, err = secretmanager.NewClient(ctx)
+	} else {
+		client, err = secretmanager.NewClient(ctx, option.WithTokenSource(oauth2.StaticTokenSource(token)))
+	}
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to create secret mgr client", err.Error())
 		return
