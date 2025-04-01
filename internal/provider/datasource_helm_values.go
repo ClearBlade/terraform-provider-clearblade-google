@@ -233,6 +233,16 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
+							"version": schema.StringAttribute{
+								MarkdownDescription: "Version of the IOTCore",
+								Required:            false,
+								Optional:            true,
+							},
+							"regions": schema.StringAttribute{
+								MarkdownDescription: "Regions to deploy the IOTCore to",
+								Required:            false,
+								Optional:            true,
+							},
 						},
 					},
 					"cb_ia": schema.SingleNestedAttribute{
@@ -258,6 +268,11 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 							"limit_memory": schema.StringAttribute{
 								MarkdownDescription: "Memory limit",
 								Required:            true,
+							},
+							"version": schema.StringAttribute{
+								MarkdownDescription: "Version of Intelligent Assets",
+								Required:            false,
+								Optional:            true,
 							},
 						},
 					},

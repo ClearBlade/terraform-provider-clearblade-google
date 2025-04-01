@@ -69,6 +69,8 @@ type IotCore struct {
 	RequestMemory            string `yaml:"requestMemory"`
 	LimitCPU                 int    `yaml:"limitCPU"`
 	LimitMemory              string `yaml:"limitMemory"`
+	Version                  string `yaml:"version"`
+	Regions                  string `yaml:"regions"`
 }
 
 type Ia struct {
@@ -77,6 +79,7 @@ type Ia struct {
 	RequestMemory            string `yaml:"requestMemory"`
 	LimitCPU                 int    `yaml:"limitCPU"`
 	LimitMemory              string `yaml:"limitMemory"`
+	Version                  string `yaml:"version"`
 }
 
 type Postgres struct {
@@ -176,6 +179,8 @@ type TfIotCore struct {
 	RequestMemory            types.String `tfsdk:"request_memory"`
 	LimitCPU                 types.Int32  `tfsdk:"limit_cpu"`
 	LimitMemory              types.String `tfsdk:"limit_memory"`
+	Version                  types.String `tfsdk:"version"`
+	Regions                  types.String `tfsdk:"regions"`
 }
 
 type TfIa struct {
@@ -184,6 +189,7 @@ type TfIa struct {
 	RequestMemory            types.String `tfsdk:"request_memory"`
 	LimitCPU                 types.Int32  `tfsdk:"limit_cpu"`
 	LimitMemory              types.String `tfsdk:"limit_memory"`
+	Version                  types.String `tfsdk:"version"`
 }
 
 type TfPostgres struct {
