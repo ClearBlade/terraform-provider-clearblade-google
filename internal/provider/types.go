@@ -26,6 +26,7 @@ type Global struct {
 	EnterpriseRegistrationKey interface{} `yaml:"enterpriseRegistrationKey"`
 	IotCoreEnabled            bool        `yaml:"iotCoreEnabled"`
 	IaEnabled                 bool        `yaml:"iaEnabled"`
+	OpsConsoleEnabled         bool        `yaml:"opsConsoleEnabled"`
 	GcpCloudSQLEnabled        bool        `yaml:"gcpCloudSQLEnabled"`
 	GcpMemoryStoreEnabled     bool        `yaml:"gcpMemoryStoreEnabled"`
 	GcpProject                interface{} `yaml:"gcpProject"`
@@ -137,6 +138,7 @@ type TfGlobal struct {
 	EnterpriseRegistrationKey types.String `tfsdk:"enterprise_registration_key"`
 	IotCoreEnabled            types.Bool   `tfsdk:"iotcore_enabled"`
 	IaEnabled                 types.Bool   `tfsdk:"ia_enabled"`
+	OpsConsoleEnabled         types.Bool   `tfsdk:"ops_console_enabled"`
 	GcpCloudSQLEnabled        types.Bool   `tfsdk:"gcp_cloudsql_enabled"`
 	GcpMemoryStoreEnabled     types.Bool   `tfsdk:"gcp_memorystore_enabled"`
 	GcpProject                types.String `tfsdk:"gcp_project"`
@@ -235,6 +237,7 @@ func (t *TfHelmValues) toHelmValues() *HelmValues {
 			EnterpriseRegistrationKey: t.Global.EnterpriseRegistrationKey.ValueString(),
 			IotCoreEnabled:            t.Global.IotCoreEnabled.ValueBool(),
 			IaEnabled:                 t.Global.IaEnabled.ValueBool(),
+			OpsConsoleEnabled:         t.Global.OpsConsoleEnabled.ValueBool(),
 			GcpCloudSQLEnabled:        t.Global.GcpCloudSQLEnabled.ValueBool(),
 			GcpMemoryStoreEnabled:     t.Global.GcpMemoryStoreEnabled.ValueBool(),
 			GcpProject:                t.Global.GcpProject.ValueString(),

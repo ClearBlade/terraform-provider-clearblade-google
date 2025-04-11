@@ -105,6 +105,10 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true if this deployment uses the Intelligent Assets Sidecar",
 								Required:            true,
 							},
+							"ops_console_enabled": schema.BoolAttribute{
+								MarkdownDescription: "Set to true if this deployment uses the Ops Console Sidecar",
+								Required:            true,
+							},
 							"gcp_cloudsql_enabled": schema.BoolAttribute{
 								MarkdownDescription: "Set to true if you are using GCP's Cloud SQL instead of postgres",
 								Required:            true,

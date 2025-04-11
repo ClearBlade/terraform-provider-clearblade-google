@@ -158,6 +158,7 @@ Required:
 - `gcp_project` (String) GCP project ID
 - `gcp_region` (String) GCP region
 - `ia_enabled` (Boolean) Set to true if this deployment uses the Intelligent Assets Sidecar
+- `ops_console_enabled` (Boolean) Set to true if this deployment uses the Ops Console Sidecar
 - `image_puller_secret` (String) Image puller secret key needed to pull the container images from GCR
 - `iotcore_enabled` (Boolean) Set to true if this deployment uses the IOTCore Sidecar
 - `namespace` (String) Instance namespace to deploy to
