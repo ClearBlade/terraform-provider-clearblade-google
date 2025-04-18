@@ -400,7 +400,14 @@ func (d *HelmValuesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	values := data.Options.toHelmValues()
+	values, diags := data.Options.toHelmValues()
+	if len(diags) > 0 {
+		resp.Diagnostics.Append(diags...)
+	}
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	valuesYaml, err := yaml.Marshal(values)
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to marhsal values", err.Error())
