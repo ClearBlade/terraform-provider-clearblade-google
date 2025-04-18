@@ -1,6 +1,11 @@
 package provider
 
-import "github.com/hashicorp/terraform-plugin-framework/types"
+import (
+	"context"
+
+	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+)
 
 type HelmValues struct {
 	Global        Global      `yaml:"global"`
@@ -103,13 +108,19 @@ type Redis struct {
 }
 
 type Clearblade struct {
-	BlueReplicas               int    `yaml:"blueReplicas"`
-	GreenReplicas              int    `yaml:"greenReplicas"`
-	MqttAllowDuplicateClientID bool   `yaml:"mqttAllowDuplicateClientID"`
-	RequestCPU                 int    `yaml:"requestCPU"`
-	RequestMemory              string `yaml:"requestMemory"`
-	LimitCPU                   int    `yaml:"limitCPU"`
-	LimitMemory                string `yaml:"limitMemory"`
+	BlueReplicas               int               `yaml:"blueReplicas"`
+	GreenReplicas              int               `yaml:"greenReplicas"`
+	MqttAllowDuplicateClientID bool              `yaml:"mqttAllowDuplicateClientID"`
+	RequestCPU                 int               `yaml:"requestCPU"`
+	RequestMemory              string            `yaml:"requestMemory"`
+	LimitCPU                   int               `yaml:"limitCPU"`
+	LimitMemory                string            `yaml:"limitMemory"`
+	License                    ClearbladeLicense `yaml:"license"`
+}
+
+type ClearbladeLicense struct {
+	LicenseRenewalWebhooks   []string `yaml:"licenseRenewalWebhooks"`
+	MetricsReportingWebhooks []string `yaml:"metricsReportingWebhooks"`
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,13 +228,25 @@ type TfClearblade struct {
 	BlueReplicas               types.Int32  `tfsdk:"blue_replicas"`
 	GreenReplicas              types.Int32  `tfsdk:"green_replicas"`
 	MqttAllowDuplicateClientID types.Bool   `tfsdk:"mqtt_allow_duplicate_client_id"`
+	LicenseRenewalWebhooks     types.List   `tfsdk:"license_renewal_webhooks"`
+	MetricsReportingWebhooks   types.List   `tfsdk:"metrics_reporting_webhooks"`
 	RequestCPU                 types.Int32  `tfsdk:"request_cpu"`
 	RequestMemory              types.String `tfsdk:"request_memory"`
 	LimitCPU                   types.Int32  `tfsdk:"limit_cpu"`
 	LimitMemory                types.String `tfsdk:"limit_memory"`
 }
 
-func (t *TfHelmValues) toHelmValues() *HelmValues {
+func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
+	var licenseRenewalWebhooks []string
+	if diags := t.Clearblade.LicenseRenewalWebhooks.ElementsAs(context.Background(), &licenseRenewalWebhooks, false); diags.HasError() {
+		return nil, diags
+	}
+
+	var metricsReportingWebhooks []string
+	if diags := t.Clearblade.MetricsReportingWebhooks.ElementsAs(context.Background(), &metricsReportingWebhooks, false); diags.HasError() {
+		return nil, diags
+	}
+
 	h := &HelmValues{
 		Global: Global{
 			Cloud:                     "gcp",
@@ -303,6 +326,10 @@ func (t *TfHelmValues) toHelmValues() *HelmValues {
 			LimitMemory:      t.CbRedis.LimitMemory.ValueString(),
 		},
 		Clearblade: Clearblade{
+			License: ClearbladeLicense{
+				LicenseRenewalWebhooks:   licenseRenewalWebhooks,
+				MetricsReportingWebhooks: metricsReportingWebhooks,
+			},
 			BlueReplicas:               int(t.Clearblade.BlueReplicas.ValueInt32()),
 			GreenReplicas:              int(t.Clearblade.GreenReplicas.ValueInt32()),
 			MqttAllowDuplicateClientID: t.Clearblade.MqttAllowDuplicateClientID.ValueBool(),
@@ -312,5 +339,5 @@ func (t *TfHelmValues) toHelmValues() *HelmValues {
 			LimitMemory:                t.Clearblade.LimitMemory.ValueString(),
 		},
 	}
-	return h
+	return h, nil
 }
