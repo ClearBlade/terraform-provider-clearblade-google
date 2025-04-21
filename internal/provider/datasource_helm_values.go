@@ -376,6 +376,16 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
+							"license_renewal_webhooks": schema.ListAttribute{
+								MarkdownDescription: "List of webhooks to request for license renewal",
+								Required:            true,
+								ElementType:         types.StringType,
+							},
+							"metrics_reporting_webhooks": schema.ListAttribute{
+								MarkdownDescription: "List of webhooks to attempt reporting metrics to",
+								Required:            true,
+								ElementType:         types.StringType,
+							},
 						},
 					},
 				},
