@@ -376,6 +376,16 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Memory limit",
 								Required:            true,
 							},
+							"license_renewal_webhooks": schema.ListAttribute{
+								MarkdownDescription: "List of webhooks to request for license renewal",
+								Required:            true,
+								ElementType:         types.StringType,
+							},
+							"metrics_reporting_webhooks": schema.ListAttribute{
+								MarkdownDescription: "List of webhooks to attempt reporting metrics to",
+								Required:            true,
+								ElementType:         types.StringType,
+							},
 						},
 					},
 				},
@@ -400,7 +410,14 @@ func (d *HelmValuesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	values := data.Options.toHelmValues()
+	values, diags := data.Options.toHelmValues()
+	if len(diags) > 0 {
+		resp.Diagnostics.Append(diags...)
+	}
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	valuesYaml, err := yaml.Marshal(values)
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to marhsal values", err.Error())
