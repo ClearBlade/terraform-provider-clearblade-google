@@ -119,8 +119,8 @@ type Clearblade struct {
 }
 
 type ClearbladeLicense struct {
-	LicenseRenewalWebhooks   []string `yaml:"licenseRenewalWebhooks"`
-	MetricsReportingWebhooks []string `yaml:"metricsReportingWebhooks"`
+	LicenseRenewalWebhooks   []string `yaml:"renewalWebhooks"`
+	MetricsReportingWebhooks []string `yaml:"reportingWebhooks"`
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
