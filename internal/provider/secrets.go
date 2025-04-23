@@ -7,17 +7,17 @@ import (
 	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
 )
 
-func secretExists(ctx context.Context, client *secretmanager.Client, projectId, secretId string) error {
+func secretExists(ctx context.Context, client *secretmanager.Client, projectId, secretId string) bool {
 	resource := getSecretResourceName(projectId, secretId)
 	_, err := client.GetSecret(ctx, &secretmanagerpb.GetSecretRequest{Name: resource})
 	if err != nil {
-		return err
+		return false
 	}
-	return nil
+	return true
 }
 
 func createSecret(ctx context.Context, client *secretmanager.Client, projectId, secretId string) error {
-	if err := secretExists(ctx, client, projectId, secretId); err == nil {
+	if secretExists(ctx, client, projectId, secretId) {
 		return nil
 	}
 	parent := "projects/" + projectId
