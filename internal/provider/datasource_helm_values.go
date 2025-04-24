@@ -123,7 +123,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 						MarkdownDescription: "Helm Chart cb-console section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
-							"request_cpu": schema.Int32Attribute{
+							"request_cpu": schema.Float32Attribute{
 								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
@@ -131,7 +131,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limit_cpu": schema.Int32Attribute{
+							"limit_cpu": schema.Float32Attribute{
 								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
@@ -145,7 +145,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 						MarkdownDescription: "Helm Chart cb_file_hosting section",
 						Required:            true,
 						Attributes: map[string]schema.Attribute{
-							"request_cpu": schema.Int32Attribute{
+							"request_cpu": schema.Float32Attribute{
 								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
@@ -153,7 +153,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limit_cpu": schema.Int32Attribute{
+							"limit_cpu": schema.Float32Attribute{
 								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
@@ -171,7 +171,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Number of HAProxy replicas",
 								Required:            true,
 							},
-							"request_cpu": schema.Int32Attribute{
+							"request_cpu": schema.Float32Attribute{
 								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
@@ -179,7 +179,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limit_cpu": schema.Int32Attribute{
+							"limit_cpu": schema.Float32Attribute{
 								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
@@ -221,7 +221,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true to force the IOTCore pod to wait for the Clearblade pods before starting",
 								Required:            true,
 							},
-							"request_cpu": schema.Int32Attribute{
+							"request_cpu": schema.Float32Attribute{
 								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
@@ -229,7 +229,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limit_cpu": schema.Int32Attribute{
+							"limit_cpu": schema.Float32Attribute{
 								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
@@ -257,7 +257,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true to force the Intelligent Assets pod to wait for the Clearblade pods before starting",
 								Required:            true,
 							},
-							"request_cpu": schema.Int32Attribute{
+							"request_cpu": schema.Float32Attribute{
 								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
@@ -265,7 +265,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limit_cpu": schema.Int32Attribute{
+							"limit_cpu": schema.Float32Attribute{
 								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
@@ -292,7 +292,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Number of Postgres replicas",
 								Required:            true,
 							},
-							"request_cpu": schema.Int32Attribute{
+							"request_cpu": schema.Float32Attribute{
 								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
@@ -300,7 +300,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limit_cpu": schema.Int32Attribute{
+							"limit_cpu": schema.Float32Attribute{
 								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
@@ -326,7 +326,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true to utilize redis sentinel with automatic failover. Requires roughly 4x CPU/mem as a non-HA deployment",
 								Required:            true,
 							},
-							"request_cpu": schema.Int32Attribute{
+							"request_cpu": schema.Float32Attribute{
 								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
@@ -334,7 +334,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limit_cpu": schema.Int32Attribute{
+							"limit_cpu": schema.Float32Attribute{
 								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
@@ -360,7 +360,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true to allow duplicate client IDs. Set to false to reject duplicate connections",
 								Required:            true,
 							},
-							"request_cpu": schema.Int32Attribute{
+							"request_cpu": schema.Float32Attribute{
 								MarkdownDescription: "Requested CPUs",
 								Required:            true,
 							},
@@ -368,7 +368,7 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Requested memory",
 								Required:            true,
 							},
-							"limit_cpu": schema.Int32Attribute{
+							"limit_cpu": schema.Float32Attribute{
 								MarkdownDescription: "CPU limit",
 								Required:            true,
 							},
