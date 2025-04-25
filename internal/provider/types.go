@@ -26,6 +26,7 @@ type Global struct {
 	EnterpriseBaseURL         interface{} `yaml:"enterpriseBaseURL"`
 	EnterpriseBlueVersion     interface{} `yaml:"enterpriseBlueVersion"`
 	EnterpriseGreenVersion    interface{} `yaml:"enterpriseGreenVersion,omitempty"`
+	EnterpriseConsoleVersion  interface{} `yaml:"enterpriseConsoleVersion,omitempty"`
 	EnterpriseSlot            interface{} `yaml:"enterpriseSlot,omitempty"`
 	EnterpriseInstanceID      interface{} `yaml:"enterpriseInstanceID"`
 	EnterpriseRegistrationKey interface{} `yaml:"enterpriseRegistrationKey"`
@@ -144,6 +145,7 @@ type TfGlobal struct {
 	EnterpriseBaseURL         types.String `tfsdk:"enterprise_base_url"`
 	EnterpriseBlueVersion     types.String `tfsdk:"enterprise_blue_version"`
 	EnterpriseGreenVersion    types.String `tfsdk:"enterprise_green_version"`
+	EnterpriseConsoleVersion  types.String `tfsdk:"enterprise_console_version"`
 	EnterpriseSlot            types.String `tfsdk:"enterprise_slot"`
 	EnterpriseInstanceID      types.String `tfsdk:"enterprise_instance_id"`
 	EnterpriseRegistrationKey types.String `tfsdk:"enterprise_registration_key"`
@@ -255,6 +257,7 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			EnterpriseBaseURL:         t.Global.EnterpriseBaseURL.ValueString(),
 			EnterpriseBlueVersion:     t.Global.EnterpriseBlueVersion.ValueString(),
 			EnterpriseGreenVersion:    t.Global.EnterpriseGreenVersion.ValueString(),
+			EnterpriseConsoleVersion:  t.Global.EnterpriseConsoleVersion.ValueString(),
 			EnterpriseSlot:            t.Global.EnterpriseSlot.ValueString(),
 			EnterpriseInstanceID:      t.Global.EnterpriseInstanceID.ValueString(),
 			EnterpriseRegistrationKey: t.Global.EnterpriseRegistrationKey.ValueString(),
