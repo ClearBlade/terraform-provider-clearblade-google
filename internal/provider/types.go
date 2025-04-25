@@ -42,24 +42,24 @@ type Global struct {
 }
 
 type Console struct {
-	RequestCPU    int    `yaml:"requestCPU"`
-	RequestMemory string `yaml:"requestMemory"`
-	LimitCPU      int    `yaml:"limitCPU"`
-	LimitMemory   string `yaml:"limitMemory"`
+	RequestCPU    float32 `yaml:"requestCPU"`
+	RequestMemory string  `yaml:"requestMemory"`
+	LimitCPU      float32 `yaml:"limitCPU"`
+	LimitMemory   string  `yaml:"limitMemory"`
 }
 
 type FileHosting struct {
-	RequestCPU    int    `yaml:"requestCPU"`
-	RequestMemory string `yaml:"requestMemory"`
-	LimitCPU      int    `yaml:"limitCPU"`
-	LimitMemory   string `yaml:"limitMemory"`
+	RequestCPU    float32 `yaml:"requestCPU"`
+	RequestMemory string  `yaml:"requestMemory"`
+	LimitCPU      float32 `yaml:"limitCPU"`
+	LimitMemory   string  `yaml:"limitMemory"`
 }
 
 type HAProxy struct {
 	Replicas      int         `yaml:"replicas"`
-	RequestCPU    int         `yaml:"requestCPU"`
+	RequestCPU    float32     `yaml:"requestCPU"`
 	RequestMemory string      `yaml:"requestMemory"`
-	LimitCPU      int         `yaml:"limitCPU"`
+	LimitCPU      float32     `yaml:"limitCPU"`
 	LimitMemory   string      `yaml:"limitMemory"`
 	Enabled       bool        `yaml:"enabled"`
 	PrimaryIP     interface{} `yaml:"primaryIP"`
@@ -70,50 +70,50 @@ type HAProxy struct {
 }
 
 type IotCore struct {
-	CheckClearbladeReadiness bool   `yaml:"checkClearbladeReadiness"`
-	RequestCPU               int    `yaml:"requestCPU"`
-	RequestMemory            string `yaml:"requestMemory"`
-	LimitCPU                 int    `yaml:"limitCPU"`
-	LimitMemory              string `yaml:"limitMemory"`
-	Version                  string `yaml:"version"`
-	Regions                  string `yaml:"regions"`
+	CheckClearbladeReadiness bool    `yaml:"checkClearbladeReadiness"`
+	RequestCPU               float32 `yaml:"requestCPU"`
+	RequestMemory            string  `yaml:"requestMemory"`
+	LimitCPU                 float32 `yaml:"limitCPU"`
+	LimitMemory              string  `yaml:"limitMemory"`
+	Version                  string  `yaml:"version"`
+	Regions                  string  `yaml:"regions"`
 }
 
 type Ia struct {
-	CheckClearbladeReadiness bool   `yaml:"checkClearbladeReadiness"`
-	RequestCPU               int    `yaml:"requestCPU"`
-	RequestMemory            string `yaml:"requestMemory"`
-	LimitCPU                 int    `yaml:"limitCPU"`
-	LimitMemory              string `yaml:"limitMemory"`
-	Version                  string `yaml:"version"`
+	CheckClearbladeReadiness bool    `yaml:"checkClearbladeReadiness"`
+	RequestCPU               float32 `yaml:"requestCPU"`
+	RequestMemory            string  `yaml:"requestMemory"`
+	LimitCPU                 float32 `yaml:"limitCPU"`
+	LimitMemory              string  `yaml:"limitMemory"`
+	Version                  string  `yaml:"version"`
 }
 
 type Postgres struct {
-	Enabled           bool   `yaml:"enabled"`
-	Replicas          int    `yaml:"replicas"`
-	RequestCPU        int    `yaml:"requestCPU"`
-	RequestMemory     string `yaml:"requestMemory"`
-	LimitCPU          int    `yaml:"limitCPU"`
-	LimitMemory       string `yaml:"limitMemory"`
-	Postgres0DiskName string `yaml:"postgres0DiskName"`
+	Enabled           bool    `yaml:"enabled"`
+	Replicas          int     `yaml:"replicas"`
+	RequestCPU        float32 `yaml:"requestCPU"`
+	RequestMemory     string  `yaml:"requestMemory"`
+	LimitCPU          float32 `yaml:"limitCPU"`
+	LimitMemory       string  `yaml:"limitMemory"`
+	Postgres0DiskName string  `yaml:"postgres0DiskName"`
 }
 
 type Redis struct {
-	Enabled          bool   `yaml:"enabled"`
-	HighAvailability bool   `yaml:"highAvailability"`
-	RequestCPU       int    `yaml:"requestCPU"`
-	RequestMemory    string `yaml:"requestMemory"`
-	LimitCPU         int    `yaml:"limitCPU"`
-	LimitMemory      string `yaml:"limitMemory"`
+	Enabled          bool    `yaml:"enabled"`
+	HighAvailability bool    `yaml:"highAvailability"`
+	RequestCPU       float32 `yaml:"requestCPU"`
+	RequestMemory    string  `yaml:"requestMemory"`
+	LimitCPU         float32 `yaml:"limitCPU"`
+	LimitMemory      string  `yaml:"limitMemory"`
 }
 
 type Clearblade struct {
 	BlueReplicas               int               `yaml:"blueReplicas"`
 	GreenReplicas              int               `yaml:"greenReplicas"`
 	MqttAllowDuplicateClientID bool              `yaml:"mqttAllowDuplicateClientID"`
-	RequestCPU                 int               `yaml:"requestCPU"`
+	RequestCPU                 float32           `yaml:"requestCPU"`
 	RequestMemory              string            `yaml:"requestMemory"`
-	LimitCPU                   int               `yaml:"limitCPU"`
+	LimitCPU                   float32           `yaml:"limitCPU"`
 	LimitMemory                string            `yaml:"limitMemory"`
 	License                    ClearbladeLicense `yaml:"license"`
 }
@@ -159,81 +159,81 @@ type TfGlobal struct {
 }
 
 type TfConsole struct {
-	RequestCPU    types.Int32  `tfsdk:"request_cpu"`
-	RequestMemory types.String `tfsdk:"request_memory"`
-	LimitCPU      types.Int32  `tfsdk:"limit_cpu"`
-	LimitMemory   types.String `tfsdk:"limit_memory"`
+	RequestCPU    types.Float32 `tfsdk:"request_cpu"`
+	RequestMemory types.String  `tfsdk:"request_memory"`
+	LimitCPU      types.Float32 `tfsdk:"limit_cpu"`
+	LimitMemory   types.String  `tfsdk:"limit_memory"`
 }
 
 type TfFileHosting struct {
-	RequestCPU    types.Int32  `tfsdk:"request_cpu"`
-	RequestMemory types.String `tfsdk:"request_memory"`
-	LimitCPU      types.Int32  `tfsdk:"limit_cpu"`
-	LimitMemory   types.String `tfsdk:"limit_memory"`
+	RequestCPU    types.Float32 `tfsdk:"request_cpu"`
+	RequestMemory types.String  `tfsdk:"request_memory"`
+	LimitCPU      types.Float32 `tfsdk:"limit_cpu"`
+	LimitMemory   types.String  `tfsdk:"limit_memory"`
 }
 
 type TfHAProxy struct {
-	Replicas      types.Int32  `tfsdk:"replicas"`
-	RequestCPU    types.Int32  `tfsdk:"request_cpu"`
-	RequestMemory types.String `tfsdk:"request_memory"`
-	LimitCPU      types.Int32  `tfsdk:"limit_cpu"`
-	LimitMemory   types.String `tfsdk:"limit_memory"`
-	Enabled       types.Bool   `tfsdk:"enabled"`
-	PrimaryIP     types.String `tfsdk:"primary_ip"`
-	MqttIP        types.String `tfsdk:"mqtt_ip"`
-	MqttOver443   types.Bool   `tfsdk:"mqtt_over_443"`
-	CertRenewal   types.Bool   `tfsdk:"cert_renewal"`
-	RenewalDays   types.Int32  `tfsdk:"renewal_days"`
+	Replicas      types.Int32   `tfsdk:"replicas"`
+	RequestCPU    types.Float32 `tfsdk:"request_cpu"`
+	RequestMemory types.String  `tfsdk:"request_memory"`
+	LimitCPU      types.Float32 `tfsdk:"limit_cpu"`
+	LimitMemory   types.String  `tfsdk:"limit_memory"`
+	Enabled       types.Bool    `tfsdk:"enabled"`
+	PrimaryIP     types.String  `tfsdk:"primary_ip"`
+	MqttIP        types.String  `tfsdk:"mqtt_ip"`
+	MqttOver443   types.Bool    `tfsdk:"mqtt_over_443"`
+	CertRenewal   types.Bool    `tfsdk:"cert_renewal"`
+	RenewalDays   types.Int32   `tfsdk:"renewal_days"`
 }
 
 type TfIotCore struct {
-	CheckClearbladeReadiness types.Bool   `tfsdk:"check_clearblade_readiness"`
-	RequestCPU               types.Int32  `tfsdk:"request_cpu"`
-	RequestMemory            types.String `tfsdk:"request_memory"`
-	LimitCPU                 types.Int32  `tfsdk:"limit_cpu"`
-	LimitMemory              types.String `tfsdk:"limit_memory"`
-	Version                  types.String `tfsdk:"version"`
-	Regions                  types.String `tfsdk:"regions"`
+	CheckClearbladeReadiness types.Bool    `tfsdk:"check_clearblade_readiness"`
+	RequestCPU               types.Float32 `tfsdk:"request_cpu"`
+	RequestMemory            types.String  `tfsdk:"request_memory"`
+	LimitCPU                 types.Float32 `tfsdk:"limit_cpu"`
+	LimitMemory              types.String  `tfsdk:"limit_memory"`
+	Version                  types.String  `tfsdk:"version"`
+	Regions                  types.String  `tfsdk:"regions"`
 }
 
 type TfIa struct {
-	CheckClearbladeReadiness types.Bool   `tfsdk:"check_clearblade_readiness"`
-	RequestCPU               types.Int32  `tfsdk:"request_cpu"`
-	RequestMemory            types.String `tfsdk:"request_memory"`
-	LimitCPU                 types.Int32  `tfsdk:"limit_cpu"`
-	LimitMemory              types.String `tfsdk:"limit_memory"`
-	Version                  types.String `tfsdk:"version"`
+	CheckClearbladeReadiness types.Bool    `tfsdk:"check_clearblade_readiness"`
+	RequestCPU               types.Float32 `tfsdk:"request_cpu"`
+	RequestMemory            types.String  `tfsdk:"request_memory"`
+	LimitCPU                 types.Float32 `tfsdk:"limit_cpu"`
+	LimitMemory              types.String  `tfsdk:"limit_memory"`
+	Version                  types.String  `tfsdk:"version"`
 }
 
 type TfPostgres struct {
-	Enabled           types.Bool   `tfsdk:"enabled"`
-	Replicas          types.Int32  `tfsdk:"replicas"`
-	RequestCPU        types.Int32  `tfsdk:"request_cpu"`
-	RequestMemory     types.String `tfsdk:"request_memory"`
-	LimitCPU          types.Int32  `tfsdk:"limit_cpu"`
-	LimitMemory       types.String `tfsdk:"limit_memory"`
-	Postgres0DiskName types.String `tfsdk:"postgres0_disk_name"`
+	Enabled           types.Bool    `tfsdk:"enabled"`
+	Replicas          types.Int32   `tfsdk:"replicas"`
+	RequestCPU        types.Float32 `tfsdk:"request_cpu"`
+	RequestMemory     types.String  `tfsdk:"request_memory"`
+	LimitCPU          types.Float32 `tfsdk:"limit_cpu"`
+	LimitMemory       types.String  `tfsdk:"limit_memory"`
+	Postgres0DiskName types.String  `tfsdk:"postgres0_disk_name"`
 }
 
 type TfRedis struct {
-	Enabled          types.Bool   `tfsdk:"enabled"`
-	HighAvailability types.Bool   `tfsdk:"high_availability"`
-	RequestCPU       types.Int32  `tfsdk:"request_cpu"`
-	RequestMemory    types.String `tfsdk:"request_memory"`
-	LimitCPU         types.Int32  `tfsdk:"limit_cpu"`
-	LimitMemory      types.String `tfsdk:"limit_memory"`
+	Enabled          types.Bool    `tfsdk:"enabled"`
+	HighAvailability types.Bool    `tfsdk:"high_availability"`
+	RequestCPU       types.Float32 `tfsdk:"request_cpu"`
+	RequestMemory    types.String  `tfsdk:"request_memory"`
+	LimitCPU         types.Float32 `tfsdk:"limit_cpu"`
+	LimitMemory      types.String  `tfsdk:"limit_memory"`
 }
 
 type TfClearblade struct {
-	BlueReplicas               types.Int32  `tfsdk:"blue_replicas"`
-	GreenReplicas              types.Int32  `tfsdk:"green_replicas"`
-	MqttAllowDuplicateClientID types.Bool   `tfsdk:"mqtt_allow_duplicate_client_id"`
-	LicenseRenewalWebhooks     types.List   `tfsdk:"license_renewal_webhooks"`
-	MetricsReportingWebhooks   types.List   `tfsdk:"metrics_reporting_webhooks"`
-	RequestCPU                 types.Int32  `tfsdk:"request_cpu"`
-	RequestMemory              types.String `tfsdk:"request_memory"`
-	LimitCPU                   types.Int32  `tfsdk:"limit_cpu"`
-	LimitMemory                types.String `tfsdk:"limit_memory"`
+	BlueReplicas               types.Int32   `tfsdk:"blue_replicas"`
+	GreenReplicas              types.Int32   `tfsdk:"green_replicas"`
+	MqttAllowDuplicateClientID types.Bool    `tfsdk:"mqtt_allow_duplicate_client_id"`
+	LicenseRenewalWebhooks     types.List    `tfsdk:"license_renewal_webhooks"`
+	MetricsReportingWebhooks   types.List    `tfsdk:"metrics_reporting_webhooks"`
+	RequestCPU                 types.Float32 `tfsdk:"request_cpu"`
+	RequestMemory              types.String  `tfsdk:"request_memory"`
+	LimitCPU                   types.Float32 `tfsdk:"limit_cpu"`
+	LimitMemory                types.String  `tfsdk:"limit_memory"`
 }
 
 func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
@@ -270,22 +270,22 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			StorageClassName:          t.Global.StorageClassName.ValueString(),
 		},
 		CbConsole: Console{
-			RequestCPU:    int(t.CbConsole.RequestCPU.ValueInt32()),
+			RequestCPU:    t.CbConsole.RequestCPU.ValueFloat32(),
 			RequestMemory: t.CbConsole.RequestMemory.ValueString(),
-			LimitCPU:      int(t.CbConsole.LimitCPU.ValueInt32()),
+			LimitCPU:      t.CbConsole.LimitCPU.ValueFloat32(),
 			LimitMemory:   t.CbConsole.LimitMemory.ValueString(),
 		},
 		CbFileHosting: FileHosting{
-			RequestCPU:    int(t.CbFileHosting.RequestCPU.ValueInt32()),
+			RequestCPU:    t.CbFileHosting.RequestCPU.ValueFloat32(),
 			RequestMemory: t.CbFileHosting.RequestMemory.ValueString(),
-			LimitCPU:      int(t.CbFileHosting.LimitCPU.ValueInt32()),
+			LimitCPU:      t.CbFileHosting.LimitCPU.ValueFloat32(),
 			LimitMemory:   t.CbFileHosting.LimitMemory.ValueString(),
 		},
 		CbHaproxy: HAProxy{
 			Replicas:      int(t.CbHaproxy.Replicas.ValueInt32()),
-			RequestCPU:    int(t.CbHaproxy.RequestCPU.ValueInt32()),
+			RequestCPU:    t.CbHaproxy.RequestCPU.ValueFloat32(),
 			RequestMemory: t.CbHaproxy.RequestMemory.ValueString(),
-			LimitCPU:      int(t.CbHaproxy.LimitCPU.ValueInt32()),
+			LimitCPU:      t.CbHaproxy.LimitCPU.ValueFloat32(),
 			LimitMemory:   t.CbHaproxy.LimitMemory.ValueString(),
 			Enabled:       t.CbHaproxy.Enabled.ValueBool(),
 			PrimaryIP:     t.CbHaproxy.PrimaryIP.ValueString(),
@@ -296,33 +296,33 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 		},
 		CbIotcore: IotCore{
 			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),
-			RequestCPU:               int(t.CbIotcore.RequestCPU.ValueInt32()),
+			RequestCPU:               t.CbIotcore.RequestCPU.ValueFloat32(),
 			RequestMemory:            t.CbIotcore.RequestMemory.ValueString(),
-			LimitCPU:                 int(t.CbIotcore.LimitCPU.ValueInt32()),
+			LimitCPU:                 t.CbIotcore.LimitCPU.ValueFloat32(),
 			LimitMemory:              t.CbIotcore.LimitMemory.ValueString(),
 		},
 		CbIa: Ia{
 			CheckClearbladeReadiness: t.CbIa.CheckClearbladeReadiness.ValueBool(),
-			RequestCPU:               int(t.CbIa.RequestCPU.ValueInt32()),
+			RequestCPU:               t.CbIa.RequestCPU.ValueFloat32(),
 			RequestMemory:            t.CbIa.RequestMemory.ValueString(),
-			LimitCPU:                 int(t.CbIa.LimitCPU.ValueInt32()),
+			LimitCPU:                 t.CbIa.LimitCPU.ValueFloat32(),
 			LimitMemory:              t.CbIa.LimitMemory.ValueString(),
 		},
 		CbPostgres: Postgres{
 			Enabled:           t.CbPostgres.Enabled.ValueBool(),
 			Replicas:          int(t.CbPostgres.Replicas.ValueInt32()),
-			RequestCPU:        int(t.CbPostgres.RequestCPU.ValueInt32()),
+			RequestCPU:        t.CbPostgres.RequestCPU.ValueFloat32(),
 			RequestMemory:     t.CbPostgres.RequestMemory.ValueString(),
-			LimitCPU:          int(t.CbPostgres.LimitCPU.ValueInt32()),
+			LimitCPU:          t.CbPostgres.LimitCPU.ValueFloat32(),
 			LimitMemory:       t.CbPostgres.LimitMemory.ValueString(),
 			Postgres0DiskName: t.CbPostgres.Postgres0DiskName.ValueString(),
 		},
 		CbRedis: Redis{
 			Enabled:          t.CbRedis.Enabled.ValueBool(),
 			HighAvailability: t.CbRedis.HighAvailability.ValueBool(),
-			RequestCPU:       int(t.CbRedis.RequestCPU.ValueInt32()),
+			RequestCPU:       t.CbRedis.RequestCPU.ValueFloat32(),
 			RequestMemory:    t.CbRedis.RequestMemory.ValueString(),
-			LimitCPU:         int(t.CbRedis.LimitCPU.ValueInt32()),
+			LimitCPU:         t.CbRedis.LimitCPU.ValueFloat32(),
 			LimitMemory:      t.CbRedis.LimitMemory.ValueString(),
 		},
 		Clearblade: Clearblade{
@@ -333,9 +333,9 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			BlueReplicas:               int(t.Clearblade.BlueReplicas.ValueInt32()),
 			GreenReplicas:              int(t.Clearblade.GreenReplicas.ValueInt32()),
 			MqttAllowDuplicateClientID: t.Clearblade.MqttAllowDuplicateClientID.ValueBool(),
-			RequestCPU:                 int(t.Clearblade.RequestCPU.ValueInt32()),
+			RequestCPU:                 t.Clearblade.RequestCPU.ValueFloat32(),
 			RequestMemory:              t.Clearblade.RequestMemory.ValueString(),
-			LimitCPU:                   int(t.Clearblade.LimitCPU.ValueInt32()),
+			LimitCPU:                   t.Clearblade.LimitCPU.ValueFloat32(),
 			LimitMemory:                t.Clearblade.LimitMemory.ValueString(),
 		},
 	}
