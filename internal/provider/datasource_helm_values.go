@@ -68,6 +68,10 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								Required:            false,
 								Optional:            true,
 							},
+							"enterprise_console_version": schema.StringAttribute{
+								MarkdownDescription: "The console version is the default Cb Console version",
+								Required:            true,
+							},
 							"enterprise_slot": schema.StringAttribute{
 								MarkdownDescription: "Utilized during Blue/Green upgrades. Leave blank if not using",
 								Required:            false,
