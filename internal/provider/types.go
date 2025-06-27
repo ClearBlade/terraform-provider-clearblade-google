@@ -310,6 +310,7 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			RequestMemory:            t.CbIa.RequestMemory.ValueString(),
 			LimitCPU:                 t.CbIa.LimitCPU.ValueFloat32(),
 			LimitMemory:              t.CbIa.LimitMemory.ValueString(),
+			Version:                  t.CbIa.Version.ValueString(),
 		},
 		CbPostgres: Postgres{
 			Enabled:           t.CbPostgres.Enabled.ValueBool(),
