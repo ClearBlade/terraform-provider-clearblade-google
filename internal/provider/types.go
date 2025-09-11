@@ -57,22 +57,26 @@ type FileHosting struct {
 }
 
 type HAProxy struct {
-	Replicas          int         `yaml:"replicas"`
-	RequestCPU        float32     `yaml:"requestCPU"`
-	RequestMemory     string      `yaml:"requestMemory"`
-	LimitCPU          float32     `yaml:"limitCPU"`
-	LimitMemory       string      `yaml:"limitMemory"`
-	Enabled           bool        `yaml:"enabled"`
-	PrimaryIP         interface{} `yaml:"primaryIP"`
-	MqttIP            interface{} `yaml:"mqttIP"`
-	MqttOver443       bool        `yaml:"mqttOver443"`
-	CertRenewal       bool        `yaml:"certRenewal"`
-	RenewalDays       int         `yaml:"renewalDays"`
-	ControllerVersion string      `yaml:"controllerVersion"`
-	AcmeDirectory     string      `yaml:"acmeDirectory"`
-	AcmeEmail         string      `yaml:"acmeEmail"`
-	AcmeEabKid        string      `yaml:"acmeEabKid"`
-	AcmeEabKey        string      `yaml:"acmeEabKey"`
+	Replicas          int          `yaml:"replicas"`
+	RequestCPU        float32      `yaml:"requestCPU"`
+	RequestMemory     string       `yaml:"requestMemory"`
+	LimitCPU          float32      `yaml:"limitCPU"`
+	LimitMemory       string       `yaml:"limitMemory"`
+	Enabled           bool         `yaml:"enabled"`
+	PrimaryIP         interface{}  `yaml:"primaryIP"`
+	MqttIP            interface{}  `yaml:"mqttIP"`
+	MqttOver443       bool         `yaml:"mqttOver443"`
+	CertRenewal       bool         `yaml:"certRenewal"`
+	RenewalDays       int          `yaml:"renewalDays"`
+	ControllerVersion string       `yaml:"controllerVersion"`
+	AcmeConfig        []AcmeConfig `yaml:"acmeConfig"`
+}
+
+type AcmeConfig struct {
+	Directory string `yaml:"directory"`
+	Email     string `yaml:"email"`
+	EabKid    string `yaml:"eabKid"`
+	EabKey    string `yaml:"eabKey"`
 }
 
 type IotCore struct {
@@ -180,22 +184,26 @@ type TfFileHosting struct {
 }
 
 type TfHAProxy struct {
-	Replicas          types.Int32   `tfsdk:"replicas"`
-	RequestCPU        types.Float32 `tfsdk:"request_cpu"`
-	RequestMemory     types.String  `tfsdk:"request_memory"`
-	LimitCPU          types.Float32 `tfsdk:"limit_cpu"`
-	LimitMemory       types.String  `tfsdk:"limit_memory"`
-	Enabled           types.Bool    `tfsdk:"enabled"`
-	PrimaryIP         types.String  `tfsdk:"primary_ip"`
-	MqttIP            types.String  `tfsdk:"mqtt_ip"`
-	MqttOver443       types.Bool    `tfsdk:"mqtt_over_443"`
-	CertRenewal       types.Bool    `tfsdk:"cert_renewal"`
-	RenewalDays       types.Int32   `tfsdk:"renewal_days"`
-	ControllerVersion types.String  `tfsdk:"controller_version"`
-	AcmeDirectory     types.String  `tfsdk:"acme_directory"`
-	AcmeEmail         types.String  `tfsdk:"acme_email"`
-	AcmeEabKid        types.String  `tfsdk:"acme_eab_kid"`
-	AcmeEabKey        types.String  `tfsdk:"acme_eab_key"`
+	Replicas          types.Int32    `tfsdk:"replicas"`
+	RequestCPU        types.Float32  `tfsdk:"request_cpu"`
+	RequestMemory     types.String   `tfsdk:"request_memory"`
+	LimitCPU          types.Float32  `tfsdk:"limit_cpu"`
+	LimitMemory       types.String   `tfsdk:"limit_memory"`
+	Enabled           types.Bool     `tfsdk:"enabled"`
+	PrimaryIP         types.String   `tfsdk:"primary_ip"`
+	MqttIP            types.String   `tfsdk:"mqtt_ip"`
+	MqttOver443       types.Bool     `tfsdk:"mqtt_over_443"`
+	CertRenewal       types.Bool     `tfsdk:"cert_renewal"`
+	RenewalDays       types.Int32    `tfsdk:"renewal_days"`
+	ControllerVersion types.String   `tfsdk:"controller_version"`
+	AcmeConfig        []TfAcmeConfig `tfsdk:"acme_config"`
+}
+
+type TfAcmeConfig struct {
+	Directory types.String `tfsdk:"directory"`
+	Email     types.String `tfsdk:"email"`
+	EabKid    types.String `tfsdk:"eab_kid"`
+	EabKey    types.String `tfsdk:"eab_key"`
 }
 
 type TfIotCore struct {
@@ -307,10 +315,7 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			CertRenewal:       t.CbHaproxy.CertRenewal.ValueBool(),
 			RenewalDays:       int(t.CbHaproxy.RenewalDays.ValueInt32()),
 			ControllerVersion: t.CbHaproxy.ControllerVersion.ValueString(),
-			AcmeDirectory:     t.CbHaproxy.AcmeDirectory.ValueString(),
-			AcmeEmail:         t.CbHaproxy.AcmeEmail.ValueString(),
-			AcmeEabKid:        t.CbHaproxy.AcmeEabKid.ValueString(),
-			AcmeEabKey:        t.CbHaproxy.AcmeEabKey.ValueString(),
+			AcmeConfig:        parseAcmeConfigs(t.CbHaproxy.AcmeConfig),
 		},
 		CbIotcore: IotCore{
 			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),
@@ -359,4 +364,17 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 		},
 	}
 	return h, nil
+}
+
+func parseAcmeConfigs(t []TfAcmeConfig) []AcmeConfig {
+	acmeConfigs := make([]AcmeConfig, len(t))
+	for i, acmeConfig := range t {
+		acmeConfigs[i] = AcmeConfig{
+			Directory: acmeConfig.Directory.ValueString(),
+			Email:     acmeConfig.Email.ValueString(),
+			EabKid:    acmeConfig.EabKid.ValueString(),
+			EabKey:    acmeConfig.EabKey.ValueString(),
+		}
+	}
+	return acmeConfigs
 }
