@@ -72,7 +72,7 @@ type HAProxy struct {
 	AcmeDirectory     string      `yaml:"acmeDirectory"`
 	AcmeEmail         string      `yaml:"acmeEmail"`
 	AcmeEabKid        string      `yaml:"acmeEabKid"`
-	AcmeEabId         string      `yaml:"acmeEabId"`
+	AcmeEabKey        string      `yaml:"acmeEabKey"`
 }
 
 type IotCore struct {
@@ -195,7 +195,7 @@ type TfHAProxy struct {
 	AcmeDirectory     types.String  `tfsdk:"acme_directory"`
 	AcmeEmail         types.String  `tfsdk:"acme_email"`
 	AcmeEabKid        types.String  `tfsdk:"acme_eab_kid"`
-	AcmeEabId         types.String  `tfsdk:"acme_eab_id"`
+	AcmeEabKey        types.String  `tfsdk:"acme_eab_key"`
 }
 
 type TfIotCore struct {
@@ -310,7 +310,7 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			AcmeDirectory:     t.CbHaproxy.AcmeDirectory.ValueString(),
 			AcmeEmail:         t.CbHaproxy.AcmeEmail.ValueString(),
 			AcmeEabKid:        t.CbHaproxy.AcmeEabKid.ValueString(),
-			AcmeEabId:         t.CbHaproxy.AcmeEabId.ValueString(),
+			AcmeEabKey:        t.CbHaproxy.AcmeEabKey.ValueString(),
 		},
 		CbIotcore: IotCore{
 			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),
