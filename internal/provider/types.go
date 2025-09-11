@@ -77,6 +77,7 @@ type AcmeConfig struct {
 	Email     string `yaml:"email"`
 	EabKid    string `yaml:"eabKid"`
 	EabKey    string `yaml:"eabKey"`
+	KeyType   string `yaml:"keyType"`
 }
 
 type IotCore struct {
@@ -204,6 +205,7 @@ type TfAcmeConfig struct {
 	Email     types.String `tfsdk:"email"`
 	EabKid    types.String `tfsdk:"eab_kid"`
 	EabKey    types.String `tfsdk:"eab_key"`
+	KeyType   types.String `tfsdk:"key_type"`
 }
 
 type TfIotCore struct {
@@ -374,6 +376,7 @@ func parseAcmeConfigs(t []TfAcmeConfig) []AcmeConfig {
 			Email:     acmeConfig.Email.ValueString(),
 			EabKid:    acmeConfig.EabKid.ValueString(),
 			EabKey:    acmeConfig.EabKey.ValueString(),
+			KeyType:   acmeConfig.KeyType.ValueString(),
 		}
 	}
 	return acmeConfigs
