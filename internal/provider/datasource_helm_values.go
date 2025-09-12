@@ -215,6 +215,38 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Days out to renew cert",
 								Required:            true,
 							},
+							"controller_version": schema.StringAttribute{
+								MarkdownDescription: "Image tag of the cb controller",
+								Required:            true,
+							},
+							"acme_config": schema.ListNestedAttribute{
+								MarkdownDescription: "ACME config",
+								Required:            true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"directory": schema.StringAttribute{
+											MarkdownDescription: "Directory of the ACME config",
+											Required:            true,
+										},
+										"email": schema.StringAttribute{
+											MarkdownDescription: "Email of the ACME config",
+											Required:            true,
+										},
+										"eab_kid": schema.StringAttribute{
+											MarkdownDescription: "EAB KID of the ACME config",
+											Required:            true,
+										},
+										"eab_key": schema.StringAttribute{
+											MarkdownDescription: "EAB Key of the ACME config",
+											Required:            true,
+										},
+										"key_type": schema.StringAttribute{
+											MarkdownDescription: "Key type of the ACME config",
+											Required:            true,
+										},
+									},
+								},
+							},
 						},
 					},
 					"cb_iotcore": schema.SingleNestedAttribute{
