@@ -131,8 +131,14 @@ type Clearblade struct {
 }
 
 type ClearbladeLicense struct {
-	LicenseRenewalWebhooks   []string `yaml:"renewalWebhooks"`
-	MetricsReportingWebhooks []string `yaml:"metricsWebhooks"`
+	LicenseRenewalWebhooks   []string            `yaml:"renewalWebhooks"`
+	MetricsReportingWebhooks []string            `yaml:"metricsWebhooks"`
+	AutoRenew                ClearbladeAutoRenew `yaml:"autoRenew"`
+}
+
+type ClearbladeAutoRenew struct {
+	Enabled bool `yaml:"enabled"`
+	Days    int  `yaml:"days"`
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -357,6 +363,10 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			License: ClearbladeLicense{
 				LicenseRenewalWebhooks:   licenseRenewalWebhooks,
 				MetricsReportingWebhooks: metricsReportingWebhooks,
+				AutoRenew: ClearbladeAutoRenew{
+					Enabled: true,
+					Days:    15,
+				},
 			},
 			BlueReplicas:               int(t.Clearblade.BlueReplicas.ValueInt32()),
 			GreenReplicas:              int(t.Clearblade.GreenReplicas.ValueInt32()),
