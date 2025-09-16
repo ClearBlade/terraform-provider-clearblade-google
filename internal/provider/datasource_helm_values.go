@@ -244,9 +244,10 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 											MarkdownDescription: "Key type of the ACME config",
 											Required:            true,
 										},
-										"domain": schema.StringAttribute{
-											MarkdownDescription: "Domain to request certificate for",
+										"domains": schema.ListAttribute{
+											MarkdownDescription: "Domains to request certificate for",
 											Required:            true,
+											ElementType:         types.StringType,
 										},
 										"file_name": schema.StringAttribute{
 											MarkdownDescription: "The file name to save the new certificate to",

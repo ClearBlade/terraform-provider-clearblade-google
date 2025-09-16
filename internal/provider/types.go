@@ -73,13 +73,13 @@ type HAProxy struct {
 }
 
 type AcmeConfig struct {
-	Directory string `yaml:"directory"`
-	Email     string `yaml:"email"`
-	EabKid    string `yaml:"eabKid"`
-	EabKey    string `yaml:"eabKey"`
-	KeyType   string `yaml:"keyType"`
-	Domain    string `yaml:"domain"`
-	FileName  string `yaml:"fileName"`
+	Directory string   `yaml:"directory"`
+	Email     string   `yaml:"email"`
+	EabKid    string   `yaml:"eabKid"`
+	EabKey    string   `yaml:"eabKey"`
+	KeyType   string   `yaml:"keyType"`
+	Domains   []string `yaml:"domains"`
+	FileName  string   `yaml:"fileName"`
 }
 
 type IotCore struct {
@@ -214,7 +214,7 @@ type TfAcmeConfig struct {
 	EabKid    types.String `tfsdk:"eab_kid"`
 	EabKey    types.String `tfsdk:"eab_key"`
 	KeyType   types.String `tfsdk:"key_type"`
-	Domain    types.String `tfsdk:"domain"`
+	Domains   types.List   `tfsdk:"domains"`
 	FileName  types.String `tfsdk:"file_name"`
 }
 
@@ -279,6 +279,11 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 		return nil, diags
 	}
 
+	acmeConfigs, diags := parseAcmeConfigs(t)
+	if diags != nil && diags.HasError() {
+		return nil, diags
+	}
+
 	h := &HelmValues{
 		Global: Global{
 			Cloud:                     "gcp",
@@ -327,7 +332,7 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			CertRenewal:       t.CbHaproxy.CertRenewal.ValueBool(),
 			RenewalDays:       int(t.CbHaproxy.RenewalDays.ValueInt32()),
 			ControllerVersion: t.CbHaproxy.ControllerVersion.ValueString(),
-			AcmeConfig:        parseAcmeConfigs(t.CbHaproxy.AcmeConfig),
+			AcmeConfig:        acmeConfigs,
 		},
 		CbIotcore: IotCore{
 			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),
@@ -382,18 +387,25 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 	return h, nil
 }
 
-func parseAcmeConfigs(t []TfAcmeConfig) []AcmeConfig {
-	acmeConfigs := make([]AcmeConfig, len(t))
-	for i, acmeConfig := range t {
+func parseAcmeConfigs(tf *TfHelmValues) ([]AcmeConfig, diag.Diagnostics) {
+	configs := tf.CbHaproxy.AcmeConfig
+	acmeConfigs := make([]AcmeConfig, len(configs))
+	for i, acmeConfig := range configs {
+		var domains []string
+		if diags := acmeConfig.Domains.ElementsAs(context.Background(), &domains, false); diags.HasError() {
+			return nil, diags
+		}
+
 		acmeConfigs[i] = AcmeConfig{
 			Directory: acmeConfig.Directory.ValueString(),
 			Email:     acmeConfig.Email.ValueString(),
 			EabKid:    acmeConfig.EabKid.ValueString(),
 			EabKey:    acmeConfig.EabKey.ValueString(),
 			KeyType:   acmeConfig.KeyType.ValueString(),
-			Domain:    acmeConfig.Domain.ValueString(),
+			Domains:   domains,
 			FileName:  acmeConfig.FileName.ValueString(),
 		}
 	}
-	return acmeConfigs
+
+	return acmeConfigs, nil
 }
