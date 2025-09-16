@@ -248,6 +248,10 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 											MarkdownDescription: "Domain to request certificate for",
 											Required:            true,
 										},
+										"file_name": schema.StringAttribute{
+											MarkdownDescription: "The file name to save the new certificate to",
+											Required:            true,
+										},
 									},
 								},
 							},

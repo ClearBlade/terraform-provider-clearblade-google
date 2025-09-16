@@ -79,6 +79,7 @@ type AcmeConfig struct {
 	EabKey    string `yaml:"eabKey"`
 	KeyType   string `yaml:"keyType"`
 	Domain    string `yaml:"domain"`
+	FileName  string `yaml:"fileName"`
 }
 
 type IotCore struct {
@@ -214,6 +215,7 @@ type TfAcmeConfig struct {
 	EabKey    types.String `tfsdk:"eab_key"`
 	KeyType   types.String `tfsdk:"key_type"`
 	Domain    types.String `tfsdk:"domain"`
+	FileName  types.String `tfsdk:"file_name"`
 }
 
 type TfIotCore struct {
@@ -390,6 +392,7 @@ func parseAcmeConfigs(t []TfAcmeConfig) []AcmeConfig {
 			EabKey:    acmeConfig.EabKey.ValueString(),
 			KeyType:   acmeConfig.KeyType.ValueString(),
 			Domain:    acmeConfig.Domain.ValueString(),
+			FileName:  acmeConfig.FileName.ValueString(),
 		}
 	}
 	return acmeConfigs
