@@ -57,17 +57,29 @@ type FileHosting struct {
 }
 
 type HAProxy struct {
-	Replicas      int         `yaml:"replicas"`
-	RequestCPU    float32     `yaml:"requestCPU"`
-	RequestMemory string      `yaml:"requestMemory"`
-	LimitCPU      float32     `yaml:"limitCPU"`
-	LimitMemory   string      `yaml:"limitMemory"`
-	Enabled       bool        `yaml:"enabled"`
-	PrimaryIP     interface{} `yaml:"primaryIP"`
-	MqttIP        interface{} `yaml:"mqttIP"`
-	MqttOver443   bool        `yaml:"mqttOver443"`
-	CertRenewal   bool        `yaml:"certRenewal"`
-	RenewalDays   int         `yaml:"renewalDays"`
+	Replicas          int          `yaml:"replicas"`
+	RequestCPU        float32      `yaml:"requestCPU"`
+	RequestMemory     string       `yaml:"requestMemory"`
+	LimitCPU          float32      `yaml:"limitCPU"`
+	LimitMemory       string       `yaml:"limitMemory"`
+	Enabled           bool         `yaml:"enabled"`
+	PrimaryIP         interface{}  `yaml:"primaryIP"`
+	MqttIP            interface{}  `yaml:"mqttIP"`
+	MqttOver443       bool         `yaml:"mqttOver443"`
+	CertRenewal       bool         `yaml:"certRenewal"`
+	RenewalDays       int          `yaml:"renewalDays"`
+	ControllerVersion string       `yaml:"controllerVersion"`
+	AcmeConfig        []AcmeConfig `yaml:"acmeConfig"`
+}
+
+type AcmeConfig struct {
+	Directory string   `yaml:"directory"`
+	Email     string   `yaml:"email"`
+	EabKid    string   `yaml:"eabKid"`
+	EabKey    string   `yaml:"eabKey"`
+	KeyType   string   `yaml:"keyType"`
+	Domains   []string `yaml:"domains"`
+	FileName  string   `yaml:"fileName"`
 }
 
 type IotCore struct {
@@ -120,8 +132,14 @@ type Clearblade struct {
 }
 
 type ClearbladeLicense struct {
-	LicenseRenewalWebhooks   []string `yaml:"renewalWebhooks"`
-	MetricsReportingWebhooks []string `yaml:"metricsWebhooks"`
+	LicenseRenewalWebhooks   []string            `yaml:"renewalWebhooks"`
+	MetricsReportingWebhooks []string            `yaml:"metricsWebhooks"`
+	AutoRenew                ClearbladeAutoRenew `yaml:"autoRenew"`
+}
+
+type ClearbladeAutoRenew struct {
+	Enabled bool `yaml:"enabled"`
+	Days    int  `yaml:"days"`
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,17 +193,29 @@ type TfFileHosting struct {
 }
 
 type TfHAProxy struct {
-	Replicas      types.Int32   `tfsdk:"replicas"`
-	RequestCPU    types.Float32 `tfsdk:"request_cpu"`
-	RequestMemory types.String  `tfsdk:"request_memory"`
-	LimitCPU      types.Float32 `tfsdk:"limit_cpu"`
-	LimitMemory   types.String  `tfsdk:"limit_memory"`
-	Enabled       types.Bool    `tfsdk:"enabled"`
-	PrimaryIP     types.String  `tfsdk:"primary_ip"`
-	MqttIP        types.String  `tfsdk:"mqtt_ip"`
-	MqttOver443   types.Bool    `tfsdk:"mqtt_over_443"`
-	CertRenewal   types.Bool    `tfsdk:"cert_renewal"`
-	RenewalDays   types.Int32   `tfsdk:"renewal_days"`
+	Replicas          types.Int32    `tfsdk:"replicas"`
+	RequestCPU        types.Float32  `tfsdk:"request_cpu"`
+	RequestMemory     types.String   `tfsdk:"request_memory"`
+	LimitCPU          types.Float32  `tfsdk:"limit_cpu"`
+	LimitMemory       types.String   `tfsdk:"limit_memory"`
+	Enabled           types.Bool     `tfsdk:"enabled"`
+	PrimaryIP         types.String   `tfsdk:"primary_ip"`
+	MqttIP            types.String   `tfsdk:"mqtt_ip"`
+	MqttOver443       types.Bool     `tfsdk:"mqtt_over_443"`
+	CertRenewal       types.Bool     `tfsdk:"cert_renewal"`
+	RenewalDays       types.Int32    `tfsdk:"renewal_days"`
+	ControllerVersion types.String   `tfsdk:"controller_version"`
+	AcmeConfig        []TfAcmeConfig `tfsdk:"acme_config"`
+}
+
+type TfAcmeConfig struct {
+	Directory types.String `tfsdk:"directory"`
+	Email     types.String `tfsdk:"email"`
+	EabKid    types.String `tfsdk:"eab_kid"`
+	EabKey    types.String `tfsdk:"eab_key"`
+	KeyType   types.String `tfsdk:"key_type"`
+	Domains   types.List   `tfsdk:"domains"`
+	FileName  types.String `tfsdk:"file_name"`
 }
 
 type TfIotCore struct {
@@ -249,6 +279,11 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 		return nil, diags
 	}
 
+	acmeConfigs, diags := parseAcmeConfigs(t)
+	if diags != nil && diags.HasError() {
+		return nil, diags
+	}
+
 	h := &HelmValues{
 		Global: Global{
 			Cloud:                     "gcp",
@@ -285,17 +320,19 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			LimitMemory:   t.CbFileHosting.LimitMemory.ValueString(),
 		},
 		CbHaproxy: HAProxy{
-			Replicas:      int(t.CbHaproxy.Replicas.ValueInt32()),
-			RequestCPU:    t.CbHaproxy.RequestCPU.ValueFloat32(),
-			RequestMemory: t.CbHaproxy.RequestMemory.ValueString(),
-			LimitCPU:      t.CbHaproxy.LimitCPU.ValueFloat32(),
-			LimitMemory:   t.CbHaproxy.LimitMemory.ValueString(),
-			Enabled:       t.CbHaproxy.Enabled.ValueBool(),
-			PrimaryIP:     t.CbHaproxy.PrimaryIP.ValueString(),
-			MqttIP:        t.CbHaproxy.MqttIP.ValueString(),
-			MqttOver443:   t.CbHaproxy.MqttOver443.ValueBool(),
-			CertRenewal:   t.CbHaproxy.CertRenewal.ValueBool(),
-			RenewalDays:   int(t.CbHaproxy.RenewalDays.ValueInt32()),
+			Replicas:          int(t.CbHaproxy.Replicas.ValueInt32()),
+			RequestCPU:        t.CbHaproxy.RequestCPU.ValueFloat32(),
+			RequestMemory:     t.CbHaproxy.RequestMemory.ValueString(),
+			LimitCPU:          t.CbHaproxy.LimitCPU.ValueFloat32(),
+			LimitMemory:       t.CbHaproxy.LimitMemory.ValueString(),
+			Enabled:           t.CbHaproxy.Enabled.ValueBool(),
+			PrimaryIP:         t.CbHaproxy.PrimaryIP.ValueString(),
+			MqttIP:            t.CbHaproxy.MqttIP.ValueString(),
+			MqttOver443:       t.CbHaproxy.MqttOver443.ValueBool(),
+			CertRenewal:       t.CbHaproxy.CertRenewal.ValueBool(),
+			RenewalDays:       int(t.CbHaproxy.RenewalDays.ValueInt32()),
+			ControllerVersion: t.CbHaproxy.ControllerVersion.ValueString(),
+			AcmeConfig:        acmeConfigs,
 		},
 		CbIotcore: IotCore{
 			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),
@@ -333,6 +370,10 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			License: ClearbladeLicense{
 				LicenseRenewalWebhooks:   licenseRenewalWebhooks,
 				MetricsReportingWebhooks: metricsReportingWebhooks,
+				AutoRenew: ClearbladeAutoRenew{
+					Enabled: true,
+					Days:    15,
+				},
 			},
 			BlueReplicas:               int(t.Clearblade.BlueReplicas.ValueInt32()),
 			GreenReplicas:              int(t.Clearblade.GreenReplicas.ValueInt32()),
@@ -344,4 +385,27 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 		},
 	}
 	return h, nil
+}
+
+func parseAcmeConfigs(tf *TfHelmValues) ([]AcmeConfig, diag.Diagnostics) {
+	configs := tf.CbHaproxy.AcmeConfig
+	acmeConfigs := make([]AcmeConfig, len(configs))
+	for i, acmeConfig := range configs {
+		var domains []string
+		if diags := acmeConfig.Domains.ElementsAs(context.Background(), &domains, false); diags.HasError() {
+			return nil, diags
+		}
+
+		acmeConfigs[i] = AcmeConfig{
+			Directory: acmeConfig.Directory.ValueString(),
+			Email:     acmeConfig.Email.ValueString(),
+			EabKid:    acmeConfig.EabKid.ValueString(),
+			EabKey:    acmeConfig.EabKey.ValueString(),
+			KeyType:   acmeConfig.KeyType.ValueString(),
+			Domains:   domains,
+			FileName:  acmeConfig.FileName.ValueString(),
+		}
+	}
+
+	return acmeConfigs, nil
 }
