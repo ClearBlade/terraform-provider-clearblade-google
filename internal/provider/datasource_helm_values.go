@@ -218,10 +218,12 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 							"controller_version": schema.StringAttribute{
 								MarkdownDescription: "Image tag of the cb controller",
 								Required:            false,
+								Optional:            true,
 							},
 							"acme_config": schema.ListNestedAttribute{
 								MarkdownDescription: "ACME config",
 								Required:            false,
+								Optional:            true,
 								NestedObject: schema.NestedAttributeObject{
 									Attributes: map[string]schema.Attribute{
 										"directory": schema.StringAttribute{
