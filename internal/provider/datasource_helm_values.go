@@ -121,6 +121,14 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true if you are using GCP's MemoryStore instead of redis",
 								Required:            true,
 							},
+							"enable_mtls_clearblade": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to enable mTLS for ClearBlade",
+								Optional:            true,
+							},
+							"enable_mtls_haproxy": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to enable mTLS for HAProxy",
+								Optional:            true,
+							},
 						},
 					},
 					"cb_console": schema.SingleNestedAttribute{
