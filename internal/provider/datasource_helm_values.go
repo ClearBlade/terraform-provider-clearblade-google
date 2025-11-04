@@ -228,6 +228,10 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								Required:            false,
 								Optional:            true,
 							},
+							"check_clearblade_readiness": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to force the HAProxy pod to wait for the Clearblade pods before starting",
+								Optional:            true,
+							},
 							"acme_config": schema.ListNestedAttribute{
 								MarkdownDescription: "ACME config",
 								Required:            false,
