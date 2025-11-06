@@ -121,6 +121,14 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true if you are using GCP's MemoryStore instead of redis",
 								Required:            true,
 							},
+							"enable_mtls_clearblade": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to enable mTLS for ClearBlade",
+								Optional:            true,
+							},
+							"enable_mtls_haproxy": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to enable mTLS for HAProxy",
+								Optional:            true,
+							},
 						},
 					},
 					"cb_console": schema.SingleNestedAttribute{
@@ -218,6 +226,10 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 							"controller_version": schema.StringAttribute{
 								MarkdownDescription: "Image tag of the cb controller",
 								Required:            false,
+								Optional:            true,
+							},
+							"check_clearblade_readiness": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to force the HAProxy pod to wait for the Clearblade pods before starting",
 								Optional:            true,
 							},
 							"acme_config": schema.ListNestedAttribute{

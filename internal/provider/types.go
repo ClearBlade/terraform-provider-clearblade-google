@@ -35,6 +35,8 @@ type Global struct {
 	OpsConsoleEnabled         bool        `yaml:"opsConsoleEnabled"`
 	GcpCloudSQLEnabled        bool        `yaml:"gcpCloudSQLEnabled"`
 	GcpMemoryStoreEnabled     bool        `yaml:"gcpMemoryStoreEnabled"`
+	MtlsClearblade            bool        `yaml:"mtlsClearBlade"`
+	MtlsHAProxy               bool        `yaml:"mtlsHAProxy"`
 	GcpProject                interface{} `yaml:"gcpProject"`
 	GcpRegion                 interface{} `yaml:"gcpRegion"`
 	GcpGSMServiceAccount      interface{} `yaml:"gcpGSMServiceAccount"`
@@ -57,19 +59,20 @@ type FileHosting struct {
 }
 
 type HAProxy struct {
-	Replicas          int          `yaml:"replicas"`
-	RequestCPU        float32      `yaml:"requestCPU"`
-	RequestMemory     string       `yaml:"requestMemory"`
-	LimitCPU          float32      `yaml:"limitCPU"`
-	LimitMemory       string       `yaml:"limitMemory"`
-	Enabled           bool         `yaml:"enabled"`
-	PrimaryIP         interface{}  `yaml:"primaryIP"`
-	MqttIP            interface{}  `yaml:"mqttIP"`
-	MqttOver443       bool         `yaml:"mqttOver443"`
-	CertRenewal       bool         `yaml:"certRenewal"`
-	RenewalDays       int          `yaml:"renewalDays"`
-	ControllerVersion string       `yaml:"controllerVersion"`
-	AcmeConfig        []AcmeConfig `yaml:"acmeConfig"`
+	Replicas                 int          `yaml:"replicas"`
+	RequestCPU               float32      `yaml:"requestCPU"`
+	RequestMemory            string       `yaml:"requestMemory"`
+	LimitCPU                 float32      `yaml:"limitCPU"`
+	LimitMemory              string       `yaml:"limitMemory"`
+	Enabled                  bool         `yaml:"enabled"`
+	PrimaryIP                interface{}  `yaml:"primaryIP"`
+	MqttIP                   interface{}  `yaml:"mqttIP"`
+	MqttOver443              bool         `yaml:"mqttOver443"`
+	CertRenewal              bool         `yaml:"certRenewal"`
+	RenewalDays              int          `yaml:"renewalDays"`
+	ControllerVersion        string       `yaml:"controllerVersion"`
+	CheckClearbladeReadiness bool         `yaml:"checkClearBladeReadiness"`
+	AcmeConfig               []AcmeConfig `yaml:"acmeConfig"`
 }
 
 type AcmeConfig struct {
@@ -176,6 +179,8 @@ type TfGlobal struct {
 	GcpRegion                 types.String `tfsdk:"gcp_region"`
 	GcpGSMServiceAccount      types.String `tfsdk:"gcp_gsm_service_account"`
 	StorageClassName          types.String `tfsdk:"storage_class_name"`
+	MtlsClearblade            types.Bool   `tfsdk:"enable_mtls_clearblade"`
+	MtlsHAProxy               types.Bool   `tfsdk:"enable_mtls_haproxy"`
 }
 
 type TfConsole struct {
@@ -193,19 +198,20 @@ type TfFileHosting struct {
 }
 
 type TfHAProxy struct {
-	Replicas          types.Int32    `tfsdk:"replicas"`
-	RequestCPU        types.Float32  `tfsdk:"request_cpu"`
-	RequestMemory     types.String   `tfsdk:"request_memory"`
-	LimitCPU          types.Float32  `tfsdk:"limit_cpu"`
-	LimitMemory       types.String   `tfsdk:"limit_memory"`
-	Enabled           types.Bool     `tfsdk:"enabled"`
-	PrimaryIP         types.String   `tfsdk:"primary_ip"`
-	MqttIP            types.String   `tfsdk:"mqtt_ip"`
-	MqttOver443       types.Bool     `tfsdk:"mqtt_over_443"`
-	CertRenewal       types.Bool     `tfsdk:"cert_renewal"`
-	RenewalDays       types.Int32    `tfsdk:"renewal_days"`
-	ControllerVersion types.String   `tfsdk:"controller_version"`
-	AcmeConfig        []TfAcmeConfig `tfsdk:"acme_config"`
+	Replicas                 types.Int32    `tfsdk:"replicas"`
+	RequestCPU               types.Float32  `tfsdk:"request_cpu"`
+	RequestMemory            types.String   `tfsdk:"request_memory"`
+	LimitCPU                 types.Float32  `tfsdk:"limit_cpu"`
+	LimitMemory              types.String   `tfsdk:"limit_memory"`
+	Enabled                  types.Bool     `tfsdk:"enabled"`
+	PrimaryIP                types.String   `tfsdk:"primary_ip"`
+	MqttIP                   types.String   `tfsdk:"mqtt_ip"`
+	MqttOver443              types.Bool     `tfsdk:"mqtt_over_443"`
+	CertRenewal              types.Bool     `tfsdk:"cert_renewal"`
+	CheckClearbladeReadiness types.Bool     `tfsdk:"check_clearblade_readiness"`
+	RenewalDays              types.Int32    `tfsdk:"renewal_days"`
+	ControllerVersion        types.String   `tfsdk:"controller_version"`
+	AcmeConfig               []TfAcmeConfig `tfsdk:"acme_config"`
 }
 
 type TfAcmeConfig struct {
@@ -301,6 +307,8 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			OpsConsoleEnabled:         t.Global.OpsConsoleEnabled.ValueBool(),
 			GcpCloudSQLEnabled:        t.Global.GcpCloudSQLEnabled.ValueBool(),
 			GcpMemoryStoreEnabled:     t.Global.GcpMemoryStoreEnabled.ValueBool(),
+			MtlsClearblade:            t.Global.MtlsClearblade.ValueBool(),
+			MtlsHAProxy:               t.Global.MtlsHAProxy.ValueBool(),
 			GcpProject:                t.Global.GcpProject.ValueString(),
 			GcpRegion:                 t.Global.GcpRegion.ValueString(),
 			GcpGSMServiceAccount:      t.Global.GcpGSMServiceAccount.ValueString(),
@@ -320,19 +328,20 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			LimitMemory:   t.CbFileHosting.LimitMemory.ValueString(),
 		},
 		CbHaproxy: HAProxy{
-			Replicas:          int(t.CbHaproxy.Replicas.ValueInt32()),
-			RequestCPU:        t.CbHaproxy.RequestCPU.ValueFloat32(),
-			RequestMemory:     t.CbHaproxy.RequestMemory.ValueString(),
-			LimitCPU:          t.CbHaproxy.LimitCPU.ValueFloat32(),
-			LimitMemory:       t.CbHaproxy.LimitMemory.ValueString(),
-			Enabled:           t.CbHaproxy.Enabled.ValueBool(),
-			PrimaryIP:         t.CbHaproxy.PrimaryIP.ValueString(),
-			MqttIP:            t.CbHaproxy.MqttIP.ValueString(),
-			MqttOver443:       t.CbHaproxy.MqttOver443.ValueBool(),
-			CertRenewal:       t.CbHaproxy.CertRenewal.ValueBool(),
-			RenewalDays:       int(t.CbHaproxy.RenewalDays.ValueInt32()),
-			ControllerVersion: t.CbHaproxy.ControllerVersion.ValueString(),
-			AcmeConfig:        acmeConfigs,
+			Replicas:                 int(t.CbHaproxy.Replicas.ValueInt32()),
+			RequestCPU:               t.CbHaproxy.RequestCPU.ValueFloat32(),
+			RequestMemory:            t.CbHaproxy.RequestMemory.ValueString(),
+			LimitCPU:                 t.CbHaproxy.LimitCPU.ValueFloat32(),
+			LimitMemory:              t.CbHaproxy.LimitMemory.ValueString(),
+			Enabled:                  t.CbHaproxy.Enabled.ValueBool(),
+			PrimaryIP:                t.CbHaproxy.PrimaryIP.ValueString(),
+			MqttIP:                   t.CbHaproxy.MqttIP.ValueString(),
+			MqttOver443:              t.CbHaproxy.MqttOver443.ValueBool(),
+			CertRenewal:              t.CbHaproxy.CertRenewal.ValueBool(),
+			CheckClearbladeReadiness: t.CbHaproxy.CheckClearbladeReadiness.ValueBool(),
+			RenewalDays:              int(t.CbHaproxy.RenewalDays.ValueInt32()),
+			ControllerVersion:        t.CbHaproxy.ControllerVersion.ValueString(),
+			AcmeConfig:               acmeConfigs,
 		},
 		CbIotcore: IotCore{
 			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),
