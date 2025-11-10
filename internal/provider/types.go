@@ -73,6 +73,8 @@ type HAProxy struct {
 	ControllerVersion        string       `yaml:"controllerVersion"`
 	CheckClearbladeReadiness bool         `yaml:"checkClearBladeReadiness"`
 	AcmeConfig               []AcmeConfig `yaml:"acmeConfig"`
+	PlatformCertName         string       `yaml:"platformCertName"`
+	MqttCertName             string       `yaml:"mqttCertName"`
 }
 
 type AcmeConfig struct {
@@ -212,6 +214,8 @@ type TfHAProxy struct {
 	RenewalDays              types.Int32    `tfsdk:"renewal_days"`
 	ControllerVersion        types.String   `tfsdk:"controller_version"`
 	AcmeConfig               []TfAcmeConfig `tfsdk:"acme_config"`
+	PlatformCertName         types.String   `tfsdk:"platform_cert_name"`
+	MqttCertName             types.String   `tfsdk:"mqtt_cert_name"`
 }
 
 type TfAcmeConfig struct {
@@ -342,6 +346,8 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			RenewalDays:              int(t.CbHaproxy.RenewalDays.ValueInt32()),
 			ControllerVersion:        t.CbHaproxy.ControllerVersion.ValueString(),
 			AcmeConfig:               acmeConfigs,
+			PlatformCertName:         t.CbHaproxy.PlatformCertName.ValueString(),
+			MqttCertName:             t.CbHaproxy.MqttCertName.ValueString(),
 		},
 		CbIotcore: IotCore{
 			CheckClearbladeReadiness: t.CbIotcore.CheckClearbladeReadiness.ValueBool(),

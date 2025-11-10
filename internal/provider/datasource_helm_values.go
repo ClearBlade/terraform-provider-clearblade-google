@@ -232,6 +232,14 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true to force the HAProxy pod to wait for the Clearblade pods before starting",
 								Optional:            true,
 							},
+							"platform_cert_name": schema.StringAttribute{
+								MarkdownDescription: "Name of the platform certificate",
+								Optional:            true,
+							},
+							"mqtt_cert_name": schema.StringAttribute{
+								MarkdownDescription: "Name of the MQTT certificate",
+								Optional:            true,
+							},
 							"acme_config": schema.ListNestedAttribute{
 								MarkdownDescription: "ACME config",
 								Required:            false,
