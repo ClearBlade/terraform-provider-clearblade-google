@@ -185,7 +185,7 @@ func (t *TLSCertificateResourceModel) getSecretBytes() ([]byte, error) {
 
 	if len(certs) == 0 {
 		// Put in a default cert so that HaProxy can start
-		certs["clearblade-0.pem"] = expiredTLSCert
+		certs["clearblade-0.pem"] = base64.StdEncoding.EncodeToString([]byte(expiredTLSCert))
 	}
 
 	certBytes, err := json.Marshal(certs)
