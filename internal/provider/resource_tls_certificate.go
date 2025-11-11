@@ -109,7 +109,7 @@ func (t *TLSCertificateResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"tls_certificates": schema.MapAttribute{
 				ElementType:         types.StringType,
-				MarkdownDescription: "Map of certificate names to PEM encoded certificate strings",
+				MarkdownDescription: "Map of certificate names to PEM encoded certificate strings. If using ACME, this should be an empty map.",
 				Required:            true,
 			},
 			"secret_id": schema.StringAttribute{
