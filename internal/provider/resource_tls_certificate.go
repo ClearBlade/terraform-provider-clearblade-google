@@ -2,8 +2,9 @@ package provider
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
-	"strings"
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
@@ -77,11 +78,11 @@ type TLSCertificateResource struct {
 
 // TLSCertificateResourceModel describes the resource data model.
 type TLSCertificateResourceModel struct {
-	ProjectId      types.String `tfsdk:"project_id"`
-	Namespace      types.String `tfsdk:"namespace"`
-	Suffix         types.String `tfsdk:"suffix"`
-	TLSCertificate types.String `tfsdk:"tls_certificate"`
-	SecretId       types.String `tfsdk:"secret_id"`
+	ProjectId       types.String `tfsdk:"project_id"`
+	Namespace       types.String `tfsdk:"namespace"`
+	Suffix          types.String `tfsdk:"suffix"`
+	TLSCertificates types.Map    `tfsdk:"tls_certificates"`
+	SecretId        types.String `tfsdk:"secret_id"`
 }
 
 func (t *TLSCertificateResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -106,8 +107,9 @@ func (t *TLSCertificateResource) Schema(ctx context.Context, req resource.Schema
 				MarkdownDescription: "Secret Id suffix",
 				Required:            true,
 			},
-			"tls_certificate": schema.StringAttribute{
-				MarkdownDescription: "Add value if not using Let's Encrypt auto renewal certificates",
+			"tls_certificates": schema.MapAttribute{
+				ElementType:         types.StringType,
+				MarkdownDescription: "Map of certificate names to PEM encoded certificate strings. If using ACME, this should be an empty map.",
 				Required:            true,
 			},
 			"secret_id": schema.StringAttribute{
@@ -153,19 +155,45 @@ func (t *TLSCertificateResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 	data.SecretId = types.StringValue(secretId)
-	var cert []byte
-	if strings.TrimSpace(data.TLSCertificate.ValueString()) == "" {
-		cert = []byte(expiredTLSCert)
-	} else {
-		cert = []byte(data.TLSCertificate.ValueString())
+	certBytes, err := data.getSecretBytes()
+	if err != nil {
+		resp.Diagnostics.AddError("Failed to get secret bytes", err.Error())
+		return
 	}
-	if err := addSecretVersion(ctx, t.client, data.ProjectId.ValueString(), secretId, cert); err != nil {
+
+	if err := addSecretVersion(ctx, t.client, data.ProjectId.ValueString(), secretId, certBytes); err != nil {
 		resp.Diagnostics.AddError("Failed to create tls certificate secret", err.Error())
 		return
 	}
 
 	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+
+func (t *TLSCertificateResourceModel) getSecretBytes() ([]byte, error) {
+	certs := map[string]string{}
+	for key, value := range t.TLSCertificates.Elements() {
+		strValue, ok := value.(types.String)
+		if !ok {
+			return nil, fmt.Errorf("value is not a string, is: %T", value)
+		}
+
+		contents := strValue.ValueString()
+		base64Contents := base64.StdEncoding.EncodeToString([]byte(contents))
+		certs[key] = base64Contents
+	}
+
+	if len(certs) == 0 {
+		// Put in a default cert so that HaProxy can start
+		certs["clearblade-0.pem"] = base64.StdEncoding.EncodeToString([]byte(expiredTLSCert))
+	}
+
+	certBytes, err := json.Marshal(certs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal certificates: %w", err)
+	}
+
+	return certBytes, nil
 }
 
 func (t *TLSCertificateResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
@@ -207,13 +235,13 @@ func (t *TLSCertificateResource) Update(ctx context.Context, req resource.Update
 	}
 
 	secretId := getSecretId(data.Namespace.ValueString(), data.Suffix.ValueString())
-	var cert []byte
-	if strings.TrimSpace(data.TLSCertificate.ValueString()) == "" {
-		cert = []byte(expiredTLSCert)
-	} else {
-		cert = []byte(data.TLSCertificate.ValueString())
+	certBytes, err := data.getSecretBytes()
+	if err != nil {
+		resp.Diagnostics.AddError("Failed to get secret bytes", err.Error())
+		return
 	}
-	if err := addSecretVersion(ctx, t.client, data.ProjectId.ValueString(), secretId, cert); err != nil {
+
+	if err := addSecretVersion(ctx, t.client, data.ProjectId.ValueString(), secretId, certBytes); err != nil {
 		resp.Diagnostics.AddError("Failed to update tls certificate", err.Error())
 		return
 	}
