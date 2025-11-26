@@ -129,6 +129,10 @@ func (d *HelmValuesDataSource) Schema(ctx context.Context, req datasource.Schema
 								MarkdownDescription: "Set to true to enable mTLS for HAProxy",
 								Optional:            true,
 							},
+							"monitoring_enabled": schema.BoolAttribute{
+								MarkdownDescription: "Set to true to enable monitoring",
+								Optional:            true,
+							},
 						},
 					},
 					"cb_console": schema.SingleNestedAttribute{

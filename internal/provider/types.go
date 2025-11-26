@@ -37,6 +37,7 @@ type Global struct {
 	GcpMemoryStoreEnabled     bool        `yaml:"gcpMemoryStoreEnabled"`
 	MtlsClearblade            bool        `yaml:"mtlsClearBlade"`
 	MtlsHAProxy               bool        `yaml:"mtlsHAProxy"`
+	MonitoringEnabled         bool        `yaml:"monitoringEnabled"`
 	GcpProject                interface{} `yaml:"gcpProject"`
 	GcpRegion                 interface{} `yaml:"gcpRegion"`
 	GcpGSMServiceAccount      interface{} `yaml:"gcpGSMServiceAccount"`
@@ -183,6 +184,7 @@ type TfGlobal struct {
 	StorageClassName          types.String `tfsdk:"storage_class_name"`
 	MtlsClearblade            types.Bool   `tfsdk:"enable_mtls_clearblade"`
 	MtlsHAProxy               types.Bool   `tfsdk:"enable_mtls_haproxy"`
+	MonitoringEnabled         types.Bool   `tfsdk:"monitoring_enabled"`
 }
 
 type TfConsole struct {
@@ -313,6 +315,7 @@ func (t *TfHelmValues) toHelmValues() (*HelmValues, diag.Diagnostics) {
 			GcpMemoryStoreEnabled:     t.Global.GcpMemoryStoreEnabled.ValueBool(),
 			MtlsClearblade:            t.Global.MtlsClearblade.ValueBool(),
 			MtlsHAProxy:               t.Global.MtlsHAProxy.ValueBool(),
+			MonitoringEnabled:         t.Global.MonitoringEnabled.ValueBool(),
 			GcpProject:                t.Global.GcpProject.ValueString(),
 			GcpRegion:                 t.Global.GcpRegion.ValueString(),
 			GcpGSMServiceAccount:      t.Global.GcpGSMServiceAccount.ValueString(),
